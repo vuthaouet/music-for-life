@@ -17,29 +17,27 @@
         android:background="@drawable/bottom_round"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/login" />
-
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="336dp"
-            android:layout_height="wrap_content"
+            android:layout_width="342dp"
+            android:layout_height="582dp"
             android:layout_gravity="center_vertical"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.493"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.61">
+
+
+            <ImageView
+                android:layout_width="227dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+
+                app:srcCompat="@drawable/login" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -56,11 +54,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/light_round"
+                android:hint="@string/hint_username"
                 android:textColor="@color/dark"
                 android:textColorHint="@color/dark_grey"
-                android:hint="@string/hint_username"
                 android:textSize="14sp" />
-
 
             <EditText
                 android:id="@+id/password_field"
@@ -69,9 +66,9 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/light_round"
                 android:hint="@string/hint_password"
+                android:inputType="textPassword"
                 android:textColor="@color/dark"
                 android:textColorHint="@color/dark_grey"
-                android:inputType="textPassword"
                 android:textSize="14sp" />
 
             <Button
@@ -89,6 +86,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
         </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout

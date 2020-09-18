@@ -28,11 +28,11 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:background="@drawable/top_round"
             android:id="@+id/list_playlists"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:background="@drawable/top_round"
             android:paddingTop="9pt"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

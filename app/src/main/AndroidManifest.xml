@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mtc.mindbook">
+    package="com.mtc.musicForLife">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -18,31 +18,31 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".NetworkErrorActivity"></activity>
-        <activity android:name=".PlaylistActivity" />
-        <activity android:name=".BookShelfActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name="com.mtc.musicForLife.NetworkErrorActivity"></activity>
+        <activity android:name="com.mtc.musicForLife.PlaylistActivity" />
+        <activity android:name="com.mtc.musicForLife.BookShelfActivity" />
+        <activity android:name="com.mtc.musicForLife.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".ReaderActivity" />
-        <activity android:name=".PlayerActivity" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name="com.mtc.musicForLife.DetailActivity" />
+        <activity android:name="com.mtc.musicForLife.ReaderActivity" />
+        <activity android:name="com.mtc.musicForLife.PlayerActivity" />
+        <activity android:name="com.mtc.musicForLife.SearchActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name="com.mtc.musicForLife.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".RegisterActivity"
-            android:parentActivityName=".LoginActivity"
+            android:name="com.mtc.musicForLife.RegisterActivity"
+            android:parentActivityName="com.mtc.musicForLife.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
 
-        <receiver android:name=".services.notification.NotificationActionService" />
+        <receiver android:name="com.mtc.musicForLife.services.notification.NotificationActionService" />
 
-        <service android:name=".services.notification.OnClearFromRecentService" />
+        <service android:name="com.mtc.musicForLife.services.notification.OnClearFromRecentService" />
     </application>
 
 </manifest>
