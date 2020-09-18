@@ -1,0 +1,133 @@
+<resources>
+    <string name="app_name">mindBook</string>
+    <string name="app_desc">The best audio book store!</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_explore">Explore</string>
+    <string name="nav_lib">Library</string>
+    <string name="nav_profile">Profile</string>
+
+    <string name="for_you">For you</string>
+    <string name="intro">Introduction</string>description
+    <string name="desc">Description</string>
+    <string name="review">Review</string>
+
+    <string name="write_review">Write your review</string>
+    <string name="write_review_hint">Describe your experience...</string>
+
+
+    <string name="top_trend">Top trending</string>
+
+    <string name="community">Community</string>
+    <string name="nearby">Nearby</string>
+
+    <string name="enter_search">Enter your keywords to search...</string>
+
+    <!--    Location-->
+    <string name="req_location_des">Please provide location permission for mindBook to use this tab.</string>
+    <string name="req_location">Open location setting</string>
+
+    <!--    Network-->
+    <string name="err_network">Can not connect to server</string>
+
+    <!--    Search-->
+    <string name="not_found">Can not find any result with your keywords.</string>
+
+    <!--    Common-->
+    <string name="err_action">Can do this action.</string>
+    <string name="loadMoreReview">Load more review</string>
+    <string name="loading">Loading</string>
+    <string name="logInRequest">Please login before using this action.</string>
+    <string name="openLogin">Open login page</string>
+
+    <!--    Category-->
+    <string name="best_novel">Best novel</string>
+    <string name="random">Random books</string>
+
+    <!--    Profile-->
+    <string name="signup_now">SignUp!</string>
+    <string name="ques_register">Do you have account?</string>
+
+    <string name="require_star">Please pick rating star</string>
+
+    <!--    epub reader-->
+    <string name="toc">Table of content</string>
+    <string name="chapter">Chapter</string>
+    <string name="shared_string">Shared with your nearby friends</string>
+    <string name="err_location_permission">Please provide location permission for mindBook to share this book.</string>
+
+    <!--    Profile-->
+    <string name="des">Interesting books</string>
+    <string name="dessub">are waiting for you to discover!</string>
+    <string name="myBookshelf">My bookshelf</string>
+
+    <string name="login">Login</string>
+    <string name="signUp">Sign Up</string>
+    <string name="join">Join the mindBook community</string>
+
+
+    <!--    Theme-->
+    <string name="chooseTheme">Choose theme</string>
+    <string name="lightTheme">Light theme</string>
+    <string name="darkTheme">Dark theme</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_username">Username</string>
+    <string name="hint_password">Password</string>
+    <string name="hint_firstname">First name</string>
+    <string name="hint_lastname">Last name</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_repassword">Confirm password</string>
+    <string name="loading_epub_title">Loading...</string>
+    <string name="favorite">Favorite</string>
+    <string name="content_description_favorite">Favorite</string>
+    <string name="epub_search">Search</string>
+    <string name="description_epub_search">Search</string>
+    <string name="more">More</string>
+    <string name="content_description_more">More</string>
+    <string name="previous_chapter">Previous Chapter</string>
+    <string name="next_chapter">Next Chapter</string>
+    <string name="love">Love</string>
+    <string name="custom_reader">Custom Reader</string>
+    <string name="bottom_sheet_text_size">Text size</string>
+    <string name="bottom_sheet_choose_font">Choose Font</string>
+    <string name="merriweather_font">Merriweather</string>
+    <string name="volkhov_font">Volkhov</string>
+    <string name="literata_font">Literata</string>
+    <string name="open_sans_font">Open Sans</string>
+    <string name="epub_dark_template">Dark</string>
+    <string name="epub_light_template">Light</string>
+    <string name="epub_paper_template">Paper</string>
+    <string name="epub_ocean_template">Ocean</string>
+    <string name="appName">mindBook</string>
+    <string name="description_track_image">Image of the track</string>
+    <string name="progress_start_val">00:00</string>
+    <string name="button_mute_description">Mute/UnMute volume</string>
+    <string name="button_play_pause">play/pause button</string>
+    <string name="no_data">No data</string>
+    <string name="share_epub">Share Epub</string>
+    <string name="epub_search_hint_text">Enter keywords</string>
+    <string name="read">Read</string>
+    <string name="listen">Listen</string>
+    <string name="textColor">Text color</string>
+    <string name="bgColor">Background color</string>
+    <string name="selectFont">Select font</string>
+    <string name="cancel">Cancel</string>
+    <string name="done">Done</string>
+    <string name="network_error">Check your connection and try again later.</string>
+    <string name="addToBookShelf">Add to your bookshelf</string>
+    <string name="t_s_ch_c_a_t_i">My bookshelf</string>
+    <string name="cu_n_s_ch">book(s)</string>
+    <string name="x_a">Delete</string>
+    <string name="search_init_value">Hiển thị kết quả 0 trên 0 kết quả.</string>
+    <string name="add_to_new_playlist">Add to new playlist</string>
+    <string name="new_playlist_hint">New playlist..</string>
+    <string name="favorite_list_name">Favorite Books</string>
+    <string name="toast_add_book">Added to </string>
+    <string name="toast_book_already_in_playlist">"Book existed in "</string>
+    <string name="no_book_in_playlist">There\'s no book in this playlist</string>
+    <string name="new_playlist_dialog_title">New Playlist</string>
+    <string name="create_new_playlist_hint">Playlist\'s name</string>
+
+</resources>
