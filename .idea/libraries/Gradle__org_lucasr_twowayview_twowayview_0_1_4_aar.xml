@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: org.lucasr.twowayview:twowayview:0.1.4@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2698b0f80442c4aaecc49b03626727c1/jetified-twowayview-0.1.4/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2698b0f80442c4aaecc49b03626727c1/jetified-twowayview-0.1.4/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/2698b0f80442c4aaecc49b03626727c1/jetified-twowayview-0.1.4/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lucasr.twowayview/twowayview/0.1.4/e7dceaa010572b586539a431a0cb2a93b2a410fd/twowayview-0.1.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.lucasr.twowayview/twowayview/0.1.4/48a0cb79a55b789ab922fd3941d40a086abda600/twowayview-0.1.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
