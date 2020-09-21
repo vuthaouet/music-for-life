@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="2pt"
+            android:paddingBottom="2pt"
             android:singleLine="true"
             android:text="Đi chợ"
             android:textSize="16sp"
@@ -42,7 +43,6 @@
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:text="Đi chợ"
-            android:paddingBottom="2pt"
             android:textSize="14sp" />
 
         <LinearLayout
@@ -55,18 +55,17 @@
                 android:id="@+id/rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:lineHeight="12sp"
+                android:lineHeight="14sp"
                 android:minHeight="0dp"
                 android:singleLine="true"
                 android:text="Đi chợ"
-                android:textSize="12sp" />
+                android:textSize="14sp" />
 
             <ImageView
-                android:layout_marginLeft="4dp"
-                android:layout_width="10sp"
-                android:layout_height="10sp"
+                android:layout_marginLeft="3dp"
+                android:layout_width="12sp"
+                android:layout_height="12sp"
                 android:scaleType="centerCrop"
-                android:tint="@color/textColor"
                 android:src="@drawable/ic_star" />
         </LinearLayout>
     </LinearLayout>

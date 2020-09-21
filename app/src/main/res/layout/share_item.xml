@@ -90,7 +90,7 @@
             android:paddingBottom="2dp"
             android:singleLine="true"
             android:text="Tran Cuong"
-            android:textColor="@color/textColor"
+            android:textColor="#345"
             android:textSize="15sp"
             android:textStyle="bold" />
         <RatingBar
@@ -114,7 +114,8 @@
         android:paddingBottom="6dp"
         android:paddingTop="0dp"
         android:paddingRight="6pt"
-        android:textColor="@color/textColor"
+        android:text="It is the best book very very long long text"
+        android:textColor="#345"
         android:maxLines="3"
         android:textSize="14sp" />
 </LinearLayout>

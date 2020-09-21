@@ -41,7 +41,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
-    implementation 'androidx.multidex:multidex:2.0.0' // ( for androidx)
+    implementation 'com.android.support:multidex:1.0.3' // ( for androidx)
     // EpubLib
     implementation('nl.siegmann.epublib:epublib-core:3.1') {
         exclude group: 'org.slf4j'
@@ -49,9 +49,7 @@ dependencies {
     }
     implementation 'org.slf4j:slf4j-android:1.7.25'
     // End EpubLib
-    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
-    implementation 'com.github.QuadFlask:colorpicker:0.0.15'
-    configurations.matching { it.name == '_internal_aapt_binary' }.all {
+    configurations.matching { it.name == '_internal_aapt2_binary' }.all {
         config ->
             config.resolutionStrategy.eachDependency {
                 details -> details.useVersion("3.3.2-5309881")
@@ -60,9 +58,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    //noinspection GradleCompatible
-    implementation 'com.android.support:design:28.0.0'
-}
-repositories {
-    mavenCentral()
 }
