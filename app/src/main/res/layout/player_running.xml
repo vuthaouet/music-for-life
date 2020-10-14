@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/playerRunningOnMain"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_alignParentBottom="true"
+    android:layout_centerInParent="true"
+    android:background="@color/design_default_color_error">
+
+    <ImageView
+        android:id="@+id/cover_art_main"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/pepe_the_frog" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="6dp"
+        android:layout_toStartOf="@id/play_pause_main"
+        android:layout_toEndOf="@id/cover_art_main">
+
+        <TextView
+            android:id="@+id/song_name_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="Song Name"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="17dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/song_artist_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:singleLine="true"
+            android:text="Artist Name"
+            android:textColor="@color/cardview_light_background" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/play_pause_main"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="18dp"
+        android:layout_toStartOf="@id/id_next_main"
+        android:src="@drawable/ic_baseline_play_arrow" />
+
+    <ImageView
+        android:id="@+id/id_next_main"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/ic_baseline_skip_next" />
+
+</RelativeLayout>
