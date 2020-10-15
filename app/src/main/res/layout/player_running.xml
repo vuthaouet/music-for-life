@@ -5,7 +5,7 @@
     android:layout_height="60dp"
     android:layout_alignParentBottom="true"
     android:layout_centerInParent="true"
-    android:background="@color/design_default_color_error">
+    android:background="@color/BG_player">
 
     <ImageView
         android:id="@+id/cover_art_main"
