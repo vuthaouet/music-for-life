@@ -30,4 +30,5 @@
     <color name="bar_icon">#000000</color>
     <color name="grey">#acacac</color>
     <color name="fma_red">#CC0000</color>
+    <color name="BG_player">#63c98c</color>
 </resources>
