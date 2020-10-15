@@ -31,6 +31,8 @@
             android:singleLine="true"
             android:text="Album name"
             android:textColor="@color/cardview_light_background"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:background="@color/BG_player"/>
     </RelativeLayout>
+
 </androidx.cardview.widget.CardView>
