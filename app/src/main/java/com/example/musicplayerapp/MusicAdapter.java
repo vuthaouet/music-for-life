@@ -69,6 +69,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(@NonNull final MusicAdapter.MyViewHolder holder, final int position) {
         holder.file_name.setText(mFiles.get(position).getTitle());
+        holder.artist_name.setText(mFiles.get(position).getArtist());
 
         byte[] image = getAlbumArt(mFiles.get(position).getPath());
         setImage(image, mContext, holder.album_art);
@@ -137,13 +138,14 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView file_name;
+        TextView file_name, artist_name;
         ImageView album_art, menuMore;
         CheckBox checkToAdd;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             file_name = itemView.findViewById(R.id.music_file_name);
+            artist_name = itemView.findViewById(R.id.music_file_artist);
             album_art = itemView.findViewById(R.id.music_img);
             menuMore = itemView.findViewById(R.id.menuMore);
             checkToAdd = itemView.findViewById(R.id.checkToAdd);
