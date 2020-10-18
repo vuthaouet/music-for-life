@@ -45,7 +45,6 @@
         android:layout_marginTop="4dp"
         android:layout_toStartOf="@id/menuMore"
         android:layout_toEndOf="@id/music_img_container"
-        android:text="aaaaaaaaaaaaaaaaaaaaaaaaa"
         android:textColor="#565659" />
 
     <ImageView
@@ -64,7 +63,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
-        android:buttonTint="@color/cardview_light_background"
+        android:buttonTint="@color/colorPrimary"
         android:visibility="gone"/>
 
 </RelativeLayout>

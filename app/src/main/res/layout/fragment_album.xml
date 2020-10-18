@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".SongsFragment"
+android:orientation="horizontal">
+
+<Button
+    android:layout_width="250dp"
+    android:layout_height="45dp"
+    android:id="@+id/create_album"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/random_btn_purple"
+    android:textColor="#ffffff"
+    android:text="Tạo album mới"/>
+
+
+<androidx.recyclerview.widget.RecyclerView
+    android:layout_marginTop="15dp"
+    android:layout_below="@id/create_album"
+    android:layout_alignParentBottom="true"
+    android:id="@+id/recyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SongsFragment">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/cardview_dark_background"
-        />
+    android:background="#f7f7f7"/>
 
 
-
-
-</LinearLayout>
+</RelativeLayout>

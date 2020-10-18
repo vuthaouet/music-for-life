@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateNewAlbum"
-    android:background="#63c98c">
+    android:background="#ffffff">
 
 
     <TextView
@@ -17,7 +17,7 @@
         android:color="#ffffff"
         android:text="Tên album"
         tools:text="Tên album"
-        android:textColor="#ffffff"/>
+        android:textColor="#000"/>
 
     <EditText
         android:id="@+id/editTextAlbumName"
@@ -29,6 +29,7 @@
         android:ems="10"
         android:hint="Nhập tên của album"
         android:padding="10dp"
+        android:background="@drawable/background_border"
         />
 
     <Button
@@ -39,7 +40,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
         android:text="Thêm album mới"
-        android:background="@color/colorAccent"
+        android:background="@drawable/random_btn_purple"
         android:textColor="#ffffff"
         android:padding="10dp"
         android:radius="12dp"/>

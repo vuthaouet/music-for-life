@@ -12,7 +12,7 @@
         android:id="@+id/relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/design_default_color_error">
+        android:background="@drawable/gradient">
 
         <ImageView
             android:id="@+id/album_image"
@@ -31,8 +31,7 @@
             android:singleLine="true"
             android:text="Album name"
             android:textColor="@color/cardview_light_background"
-            android:textStyle="bold"
-            android:background="#63c98c"/>
+            android:textStyle="bold"/>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
