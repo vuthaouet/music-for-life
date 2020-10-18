@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -49,6 +51,9 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
     private Handler handler = new Handler();
 
+    Animation spinImage;
+
+
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -79,8 +84,9 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
-
         initViews();
+        spinImage = AnimationUtils.loadAnimation(this, R.anim.spin);
+        cover_art.startAnimation(spinImage);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (mediaPlayer == null) {
@@ -205,7 +211,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         back_btn = findViewById(R.id.back_btn);
         menu_btn = findViewById(R.id.menu_btn);
 
-        id_shuffer = findViewById(R.id.id_shuffer);
+        id_shuffer = findViewById(R.id.id_shuffle);
         id_prev = findViewById(R.id.id_prev);
         id_next = findViewById(R.id.id_next);
         id_repeat = findViewById(R.id.id_repeat);
@@ -362,6 +368,8 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         if (song_artist_main != null && song_name_main != null) {
             controlMusicPlayerFromMain(getApplicationContext());
         }
+        cover_art.clearAnimation();
+        cover_art.startAnimation(spinImage);
 
         metaData(uri);
     }
@@ -376,6 +384,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             mediaPlayer.pause();
 
             runOnUiThread();
+            cover_art.clearAnimation();
         } else {
             CreateNotification.createNotification(PlayerActivity.this, R.drawable.ic_baseline_pause, listSongs.get(position));
             if (play_pause_main != null) {
@@ -385,6 +394,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             mediaPlayer.start();
 
             runOnUiThread();
+            cover_art.startAnimation(spinImage);
         }
     }
 
@@ -410,6 +420,8 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         if (song_artist_main != null && song_name_main != null) {
             controlMusicPlayerFromMain(getApplicationContext());
         }
+        cover_art.clearAnimation();
+        cover_art.startAnimation(spinImage);
 
         metaData(uri);
     }

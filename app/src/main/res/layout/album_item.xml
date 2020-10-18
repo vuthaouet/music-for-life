@@ -32,7 +32,7 @@
             android:text="Album name"
             android:textColor="@color/cardview_light_background"
             android:textStyle="bold"
-            android:background="@color/BG_player"/>
+            android:background="#63c98c"/>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

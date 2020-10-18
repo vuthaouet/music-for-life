@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateNewAlbum"
-    android:background="@color/BG_player">
+    android:background="#63c98c">
 
 
     <TextView
@@ -14,10 +14,10 @@
         android:layout_height="30dp"
         android:layout_marginLeft="45dp"
         android:layout_marginTop="80dp"
-        android:color="@color/white"
+        android:color="#ffffff"
         android:text="Tên album"
         tools:text="Tên album"
-        android:textColor="@color/white"/>
+        android:textColor="#ffffff"/>
 
     <EditText
         android:id="@+id/editTextAlbumName"
@@ -40,7 +40,7 @@
         android:layout_marginTop="120dp"
         android:text="Thêm album mới"
         android:background="@color/colorAccent"
-        android:textColor="@color/white"
+        android:textColor="#ffffff"
         android:padding="10dp"
         android:radius="12dp"/>
 </RelativeLayout>
