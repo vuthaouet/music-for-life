@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/audio_item"
-    android:padding="10dp">
+    android:padding="10dp"
+    android:background="#f7f7f7">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/music_img_container"
