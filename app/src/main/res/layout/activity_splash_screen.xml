@@ -12,7 +12,6 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:contentDescription="@string/app_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/newpepe"
@@ -21,19 +20,9 @@
 
     <ImageView
         android:id="@+id/logoText"
-        android:contentDescription="@string/app_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="106dp"
-        android:layout_marginTop="480dp"
-        android:layout_marginEnd="125dp"
-        android:layout_marginBottom="200dp"
-        android:scaleType="fitCenter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/text"
-        android:visibility="visible" />
+        android:scaleType="fitXY" />
 
 </RelativeLayout>
