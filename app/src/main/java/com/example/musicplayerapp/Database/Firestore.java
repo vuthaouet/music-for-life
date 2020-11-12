@@ -1,4 +1,4 @@
-package com.example.musicplayerapp;
+package com.example.musicplayerapp.Database;
 
 import android.os.Bundle;
 
@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.musicplayerapp.MusicFiles;
+import com.example.musicplayerapp.R;
 import com.example.musicplayerapp.Services.FirestoreAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
