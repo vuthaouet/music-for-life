@@ -1,6 +1,7 @@
 package com.example.musicplayerapp;
 
 public class MusicFiles {
+    private String link;
     private String path;
     private String title;
     private String artist;
@@ -15,8 +16,25 @@ public class MusicFiles {
         this.duration = duration;
     }
 
+    public MusicFiles(String link, String path, String title, String artist, String album, String duration) {
+        this.link = link;
+        this.path = path;
+        this.title = title;
+        this.artist = artist;
+        this.album = album;
+        this.duration = duration;
+    }
+
     public MusicFiles() {
 
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public String getPath() {

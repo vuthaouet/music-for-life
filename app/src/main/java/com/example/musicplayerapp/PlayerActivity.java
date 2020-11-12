@@ -1,5 +1,7 @@
 package com.example.musicplayerapp;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -13,8 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -44,15 +45,13 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     static TextView song_name, song_artist, durationPlayed, durationTotal;
     static ImageView back_btn, menu_btn, id_shuffer, id_prev, id_next, id_repeat, cover_art;
     static FloatingActionButton play_pause;
-
+    static ObjectAnimator anim;
+    
     SeekBar seekBar;
     NotificationManager notificationManager;
     private Thread playThread, prevThread, nextThread;
 
     private Handler handler = new Handler();
-
-    Animation spinImage;
-
 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -85,8 +84,6 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         initViews();
-        spinImage = AnimationUtils.loadAnimation(this, R.anim.spin);
-        cover_art.startAnimation(spinImage);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (mediaPlayer == null) {
@@ -97,6 +94,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         }
 
         continuePlayingMusic();
+        initAnim();
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -237,7 +235,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
         if (listSongs != null) {
             play_pause.setImageResource(R.drawable.ic_baseline_pause);
-            Log.d("uri", "getIntentMethod: " + listSongs.size() + " " + Integer.toString(position));
+            Log.d("uri", "getIntentMethod: " + listSongs.size() + " " + position);
 
             uri = Uri.parse(listSongs.get(position).getPath());
         }
@@ -299,7 +297,6 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         playThreadBtn();
         prevThreadBtn();
         nextThreadBtn();
-
         super.onResume();
     }
 
@@ -368,10 +365,10 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         if (song_artist_main != null && song_name_main != null) {
             controlMusicPlayerFromMain(getApplicationContext());
         }
-        cover_art.clearAnimation();
-        cover_art.startAnimation(spinImage);
 
         metaData(uri);
+        anim.cancel();
+        anim.start();
     }
 
     private void play_pauseClicked() {
@@ -384,7 +381,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             mediaPlayer.pause();
 
             runOnUiThread();
-            cover_art.clearAnimation();
+            anim.pause();
         } else {
             CreateNotification.createNotification(PlayerActivity.this, R.drawable.ic_baseline_pause, listSongs.get(position));
             if (play_pause_main != null) {
@@ -394,7 +391,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             mediaPlayer.start();
 
             runOnUiThread();
-            cover_art.startAnimation(spinImage);
+            anim.resume();
         }
     }
 
@@ -421,9 +418,10 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             controlMusicPlayerFromMain(getApplicationContext());
         }
         cover_art.clearAnimation();
-        cover_art.startAnimation(spinImage);
 
         metaData(uri);
+        anim.cancel();
+        anim.start();
     }
 
     @Override
@@ -453,5 +451,28 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                 handler.postDelayed(this, 1000);
             }
         });
+    }
+    private void initAnim(){
+        ImageView spinImage = findViewById(R.id.cover_art);
+
+        anim = ObjectAnimator.ofFloat(spinImage, "rotation", 0, 360);
+        anim.setDuration(5000);
+        anim.setRepeatCount(ValueAnimator.INFINITE);
+        anim.setRepeatMode(ValueAnimator.RESTART);
+        anim.setInterpolator(new LinearInterpolator());
+
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()){
+                anim.start();
+            }
+            else{
+                anim.start();
+                anim.pause();
+            }
+        }
+        else {
+            anim.start();
+        }
+
     }
 }
