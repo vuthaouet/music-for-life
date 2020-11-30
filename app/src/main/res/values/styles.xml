@@ -12,5 +12,8 @@
         <item name="android:paddingRight">8pt</item>
         <item name="android:paddingLeft">8pt</item>
     </style>
+    <style name="CustomTabText" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">11dp</item>
+    </style>
 
 </resources>

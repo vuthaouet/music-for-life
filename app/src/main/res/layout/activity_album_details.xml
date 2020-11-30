@@ -4,10 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#ffffff"
     tools:context=".AlbumDetails"
     android:id="@+id/main_layout">
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="370dp"
+        android:id="@+id/control_album"
+        android:background="@drawable/gradient_bg2"
+        >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_top_btn_album"
         android:layout_width="match_parent"
@@ -34,56 +38,57 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/card"
-        android:layout_width="match_parent"
-        android:layout_height="232dp"
-        android:layout_below="@id/layout_top_btn_album"
-        android:layout_weight="1"
-        android:gravity="center">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/card"
+            android:layout_width="410dp"
+            android:layout_height="246dp"
+            android:layout_below="@id/layout_top_btn_album"
+            android:layout_weight="1"
+            android:angle="90"
+            android:gravity="center">
 
 
-        <androidx.cardview.widget.CardView
+            <androidx.cardview.widget.CardView
 
-            android:id="@+id/cardView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="0dp"
-            android:foregroundGravity="center"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">>
+                android:id="@+id/cardView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="0dp"
+                android:foregroundGravity="center"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">>
 
-            <ImageView
-                android:id="@+id/albumPhoto"
-                android:layout_width="195dp"
-                android:layout_height="200dp"
-                android:background="@drawable/background_border_form"
-                android:scaleType="centerCrop"
-                android:src="@drawable/pepe_the_frog" />
+                <ImageView
+                    android:id="@+id/albumPhoto"
+                    android:layout_width="195dp"
+                    android:layout_height="200dp"
+                    android:background="@drawable/background_border_form"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/pepe_the_frog" />
 
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/album_name_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:gravity="center_horizontal"
-            android:text="Album name"
-            android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            <TextView
+                android:id="@+id/album_name_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:gravity="center_horizontal"
+                android:text="Album name"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
         android:id="@+id/buttonAlbumplayer"
@@ -97,22 +102,23 @@
         android:radius="12dp"
         android:text="Phát nhạc"
         android:textColor="#ffffff" />
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="260dp"
-        android:layout_below="@+id/buttonAlbumplayer"
+        android:layout_below="@+id/control_album"
         android:layout_marginTop="25dp" />
 
     <ImageView
         android:id="@+id/addAlbum"
         android:layout_width="50dp"
         android:layout_height="66dp"
-        android:layout_below="@+id/buttonAlbumplayer"
+        android:layout_below="@+id/control_album"
         android:layout_marginLeft="330dp"
-        android:layout_marginTop="200dp"
-        android:src="@drawable/ic_baseline_add_circle_black"
+        android:layout_marginTop="210dp"
+        android:src="@drawable/ic_add_song"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.952"

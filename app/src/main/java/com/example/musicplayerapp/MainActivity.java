@@ -165,11 +165,17 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        viewPagerAdapter.addFragments(new SongsFragment(), "Songs");
+        viewPagerAdapter.addFragments(new SongsFragment(), "Bài hát");
         viewPagerAdapter.addFragments(new AlbumFragment(), "Albums");
+        viewPagerAdapter.addFragments(new ProfileFragment(), "Cá nhân");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_music_song);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_album);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_profile);
+
 
         databaseHelper = new DatabaseHelper(MainActivity.this);
 

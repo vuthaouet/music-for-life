@@ -20,7 +20,9 @@
         <activity
             android:name=".PlayerActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        </activity>
 
         <activity android:name=".SplashScreen" android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
