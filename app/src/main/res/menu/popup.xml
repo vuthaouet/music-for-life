@@ -5,4 +5,13 @@
         android:id="@+id/delete"
         android:title="Delete"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/download"
+        android:title="Download"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/comment"
+        android:title="Comment"
+        app:showAsAction="never" />
 </menu>

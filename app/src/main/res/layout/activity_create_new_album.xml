@@ -10,8 +10,8 @@
 
     <RelativeLayout
         android:id="@+id/relativeLayout2"
-        android:layout_width="318dp"
-        android:layout_height="550dp"
+        android:layout_width="320dp"
+        android:layout_height="500dp"
         android:layout_marginStart="44dp"
         android:layout_marginTop="44dp"
         android:background="@drawable/background_border_form"
@@ -32,15 +32,15 @@
 
         <EditText
             android:id="@+id/editTextAlbumName"
-            android:layout_width="288dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="80dp"
             android:layout_marginTop="120dp"
-            android:background="@drawable/btn_white"
+            android:background="@drawable/background_border"
             android:ems="10"
             android:hint="Nhập tên của album"
-            android:padding="15dp" />
+            android:padding="10dp" />
 
         <Button
             android:id="@+id/buttonAlbumName"
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/editTextAlbumName"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="120dp"
             android:background="@drawable/random_btn_purple"
             android:padding="10dp"
             android:radius="12dp"

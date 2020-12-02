@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/audio_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/audio_item"
-    android:padding="10dp"
-    android:background="#f7f7f7">
+    android:background="#f7f7f7"
+    android:padding="10dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/music_img_container"
@@ -16,21 +16,21 @@
 
         <ImageView
             android:id="@+id/music_img"
-            android:background="@drawable/pepe_the_frog"
-            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_width="match_parent" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/pepe_the_frog" />
 
     </androidx.cardview.widget.CardView>
 
 
     <TextView
         android:id="@+id/music_file_name"
-        android:layout_width="291dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginEnd="0dp"
         android:layout_toStartOf="@id/menuMore"
         android:layout_toEndOf="@id/music_img_container"
         android:text="File Name"
@@ -47,13 +47,13 @@
         android:textColor="#565659" />
 
     <ImageView
+        android:id="@+id/menuMore"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:id="@+id/menuMore"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_baseline_more_vert"
+        android:layout_centerVertical="true"
         android:layout_marginEnd="5dp"
-        android:layout_centerVertical="true" />
+        android:src="@drawable/ic_baseline_more_vert" />
 
     <CheckBox
         android:id="@+id/checkToAdd"
@@ -63,6 +63,6 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="10dp"
         android:buttonTint="@color/colorPrimary"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>
