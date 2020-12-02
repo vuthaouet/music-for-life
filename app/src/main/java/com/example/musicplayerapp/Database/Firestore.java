@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.musicplayerapp.MusicFiles;
+import com.example.musicplayerapp.Genre;
 import com.example.musicplayerapp.R;
 import com.example.musicplayerapp.Services.FirestoreAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -27,11 +27,11 @@ public class Firestore extends AppCompatActivity{
         firebaseFirestore = FirebaseFirestore.getInstance();
         mFirestoreList = findViewById(R.id.firestore_list);
 
-        Query query = firebaseFirestore.collection("Music");
+        Query query = firebaseFirestore.collection("Country");
 
-        FirestoreRecyclerOptions<MusicFiles> options = new FirestoreRecyclerOptions.Builder<MusicFiles>()
+        FirestoreRecyclerOptions<Genre> options = new FirestoreRecyclerOptions.Builder<Genre>()
                 .setLifecycleOwner(this)
-                .setQuery(query, MusicFiles.class)
+                .setQuery(query, Genre.class)
                 .build();
 
         adapter = new FirestoreAdapter(options);
