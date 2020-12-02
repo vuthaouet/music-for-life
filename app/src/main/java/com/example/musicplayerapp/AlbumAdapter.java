@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.musicplayerapp.Entity.MusicFiles;
+
 import java.util.ArrayList;
 
 import static com.example.musicplayerapp.MainActivity.albumFiles;
@@ -53,7 +55,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        return albumFiles.size();
+        if (albumFiles != null) {
+            return albumFiles.size();
+        }
+        return 0;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

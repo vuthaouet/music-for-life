@@ -10,9 +10,12 @@ import android.support.v4.media.session.MediaSessionCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.example.musicplayerapp.Entity.MusicFiles;
 import com.example.musicplayerapp.Services.NotificationActionService;
 
+import static com.example.musicplayerapp.MainActivity.playOnline;
 import static com.example.musicplayerapp.PlayerActivity.position;
+import static com.example.musicplayerapp.PlayerActivityOnline.positionOnl;
 
 public class CreateNotification {
     public static final String CHANNEL_ID = "channel1";
@@ -45,10 +48,19 @@ public class CreateNotification {
             pendingIntentPlayPause = PendingIntent.getBroadcast(context, 0, intentPlayPause, PendingIntent.FLAG_UPDATE_CURRENT);
 
             PendingIntent pendingPlayerActivity;
-            Intent intentPlayerActivity = new Intent(context, PlayerActivity.class);
-            intentPlayerActivity.putExtra("position", position);
-            intentPlayerActivity.putExtra("songName", musicFiles.getTitle());
+
+            Intent intentPlayerActivity;
+            if (playOnline) {
+                intentPlayerActivity = new Intent(context, PlayerActivityOnline.class);
+                intentPlayerActivity.putExtra("songIndexOnl", positionOnl);
+            } else {
+                intentPlayerActivity = new Intent(context, PlayerActivity.class);
+                intentPlayerActivity.putExtra("position", position);
+                intentPlayerActivity.putExtra("songName", musicFiles.getTitle());
+            }
+
             pendingPlayerActivity = PendingIntent.getActivity(context, 0, intentPlayerActivity, PendingIntent.FLAG_UPDATE_CURRENT);
+
 
             PendingIntent pendingCloseNotification;
             Intent intentCloseNotification = new Intent(context, NotificationActionService.class)
