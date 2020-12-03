@@ -3,30 +3,24 @@ package com.example.musicplayerapp.Database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.musicplayerapp.MusicFiles;
+import com.example.musicplayerapp.Entity.MusicFiles;
 
 import java.util.ArrayList;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-
-    private static final String ALBUM_MANAGER = "ALBUM_MANAGER";
-    private static final String ALBUM_NAME = "ALBUM_NAME";
-
     private static final String MUSIC_TITLE = "MUSIC_TITLE";
     private static final String MUSIC_ARTIST = "MUSIC_ARTIST";
     private static final String MUSIC_PATH = "MUSIC_PATH";
     private static final String MUSIC_DURATION = "MUSIC_DURATION";
     private static final String MUSIC_ALBUM = "MUSIC_ALBUM";
-
     private static final String ID = "ID";
-
-    private static String ALBUM_TITLE;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, "musicPlayerApp.db", null, 1);
@@ -34,11 +28,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String createTableStatement = "CREATE TABLE " + ALBUM_MANAGER + " ( " +
-                ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                ALBUM_NAME + " TEXT )";
 
-        sqLiteDatabase.execSQL(createTableStatement);
     }
 
     @Override
@@ -46,11 +36,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList<MusicFiles> createUserTable(String ALBUM_TITLE) {
-        this.ALBUM_TITLE = ALBUM_TITLE;
-        ArrayList<MusicFiles> newAlbumFile = new ArrayList<>();
-        newAlbumFile.add(new MusicFiles(null, null, null, ALBUM_TITLE, null));
-
+    public boolean createUserTable(String ALBUM_TITLE) {
+        /*ArrayList<MusicFiles> newAlbumFile = new ArrayList<>();
+        newAlbumFile.add(new MusicFiles(null, null, null, ALBUM_TITLE, null));*/
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         String createTableStatement = "CREATE TABLE " + ALBUM_TITLE + " ( " +
                 ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -60,20 +48,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 MUSIC_ALBUM + " TEXT, " +
                 MUSIC_DURATION + " TEXT )";
 
-
-        sqLiteDatabase.execSQL(createTableStatement);
-
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(ALBUM_NAME, ALBUM_TITLE);
-        sqLiteDatabase.insert(ALBUM_MANAGER, null, contentValues);
-
+        try {
+            sqLiteDatabase.execSQL(createTableStatement);
+            Log.d("sqlite", "createUserTable: True");
+        } catch (SQLException exception) {
+            Log.d("sqlite", "createUserTable: False");
+        }
         sqLiteDatabase.close();
-
-        return newAlbumFile;
+        return true;
     }
 
-    public void deleteAlbum(String albumName) {
+    /*public void deleteAlbum(String albumName) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         String deleteAlbumQuery = "DROP TABLE IF EXISTS " + albumName;
@@ -150,5 +135,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.close();
 
         return filesFromAlbum;
-    }
+    }*/
 }

@@ -56,17 +56,17 @@
 
 
     <RelativeLayout
-        android:layout_marginTop="10dp"
         android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="360dp"
-        android:layout_below="@id/layout_top_btn">
+        android:layout_below="@id/layout_top_btn"
+        android:layout_marginTop="10dp">
 
 
         <androidx.cardview.widget.CardView
 
-            android:layout_width="360dp"
-            android:layout_height="360dp"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
             android:layout_centerHorizontal="true"
             app:cardCornerRadius="180dp"
             app:cardElevation="0dp">

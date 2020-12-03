@@ -3,7 +3,4 @@
     <color name="colorPrimary">#1B1A1C</color>
     <color name="colorPrimaryDark">#151515</color>
     <color name="colorAccent">#FFFFFF</color>
-    <color name="colorIcontab" >#65666b</color>
-    <color name="colorIndicatorIcontab" >#0064e3</color>
-    <color name="textColorOpacity">#BF334455</color>
 </resources>

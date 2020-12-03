@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayerapp.Database.DatabaseHelper;
+import com.example.musicplayerapp.Entity.MusicFiles;
 
 import java.util.ArrayList;
 
@@ -112,7 +113,7 @@ public class AlbumDetails extends AppCompatActivity {
 
     private boolean getFromDatabase(final ArrayList<MusicFiles> albumSongs, final String albumNameIntent) {
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
-        albumSongs.addAll(databaseHelper.getFilesFromAlbum(albumNameIntent));
+        /*albumSongs.addAll(databaseHelper.getFilesFromAlbum(albumNameIntent));*/
 
         for (int i = 0; i < albumFiles.size(); i++) {
             if (albumFiles.get(i).get(0).getAlbum() == albumNameIntent) {
