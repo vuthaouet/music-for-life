@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.musicplayerapp.Database.UploadFile;
 import com.example.musicplayerapp.Entity.MusicFiles;
 import com.example.musicplayerapp.R;
 import com.example.musicplayerapp.Random.RandomString;
@@ -23,6 +24,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -73,7 +75,8 @@ public class UserInfor extends AppCompatActivity {
                 iFullName.setText(value.getString("fullName"));
             }
         });*/
-        iEmail.setText(firebaseAuth.getCurrentUser().getDisplayName());
+        iFullName.setText(firebaseUser.getDisplayName());
+        iEmail.setText(firebaseUser.getEmail());
 
         documentReference.update("likes", FieldValue.arrayRemove("lJqJDe5NbBScyTKdB3e1"));
         documentReference.update("likes", FieldValue.arrayUnion("lJqJDe5NbBScyTKdB3e1"));
@@ -126,7 +129,7 @@ public class UserInfor extends AppCompatActivity {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showFileChooser();
+                startActivity(new Intent(getApplicationContext(), UploadFile.class));
             }
         });
     }
@@ -148,81 +151,5 @@ public class UserInfor extends AppCompatActivity {
                     .load(R.drawable.pepe_the_frog)
                     .into(imageView);
         }
-    }
-
-    private void showFileChooser() {
-        Intent intent = new Intent();
-        intent.setType("audio/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select a song"), 1);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK && data.getData() != null) {
-                //the selected audio.
-                Uri uri = data.getData();
-                uploadSong(uri);
-            }
-        }
-    }
-
-    private void uploadSong(Uri uri) {
-        String fileName = "name" + RandomString.getNumericString(3) + ".mp3";
-
-        final StorageReference newMusicFile = firebaseStorage.getReference().child(fileName);
-        newMusicFile.putFile(uri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        newMusicFile.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                MusicFiles musicFiles = new MusicFiles("title_new3", "artist", uri.toString());
-                                firebaseFirestore.collection("Music").add(musicFiles)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                documentReference.update("id", documentReference.getId());
-                                                Log.d("name", "onSuccess: " + firebaseUser.getDisplayName());
-
-                                                Map<String, Object> upload = new HashMap<>();
-                                                upload.put("ok", "Done");
-
-                                                firebaseFirestore.collection("UserUpload")
-                                                        .document(firebaseUser.getDisplayName())
-                                                        .set(upload)
-                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-                                                                Log.d("uploadfile", "onSuccess: OK");
-                                                            }
-                                                        });
-                                                /*createNewAlbum.update("upload", FieldValue.arrayUnion(documentReference.getId()))
-                                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<Void> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    Log.d("newAlbum", "onComplete: Ok");
-                                                                }
-                                                            }
-                                                        });*/
-                                                /*firebaseFirestore.collection("UserUpload").document(firebaseAuth.getUid())
-                                                        .update("upload", FieldValue.arrayUnion(documentReference.getId()));*/
-                                            }
-                                        });
-                            }
-                        });
-                        Log.d("upload", "onSuccess: OK");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
-                });
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,19 +31,17 @@ public class Firestore extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private RecyclerView mFirestoreList;
     private FirestoreAdapter adapter;
-    private Button firebaseBtn;
+
+    private ProgressBar progressBarLoadingMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firestore);
 
-        musicFilesOnline = new ArrayList<>();
+        initView();
 
-        mFirestoreList = findViewById(R.id.firestore_list);
-        firebaseBtn = findViewById(R.id.firebaseBtn);
-
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        progressBarLoadingMusic.setVisibility(View.GONE);
         Query query = firebaseFirestore.collection("Music");
 
         query.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
@@ -58,7 +57,7 @@ public class Firestore extends AppCompatActivity {
                 .setQuery(query, MusicFiles.class)
                 .build();
 
-        adapter = new FirestoreAdapter(options, this);
+        adapter = new FirestoreAdapter(options, this, progressBarLoadingMusic);
 
         mFirestoreList.setHasFixedSize(true);
         mFirestoreList.setLayoutManager(new LinearLayoutManager(this));
@@ -66,13 +65,13 @@ public class Firestore extends AppCompatActivity {
 
         //Log.d("firebase", "onCreate: " + musicFilesOnline.toString());
 
-        firebaseBtn.setOnClickListener(new View.OnClickListener() {
+        /*firebaseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     /*private String formatTime(int mCurrentPosition) {
@@ -96,6 +95,14 @@ public class Firestore extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    private void initView() {
+        musicFilesOnline = new ArrayList<>();
+        mFirestoreList = findViewById(R.id.firestore_list);
+        progressBarLoadingMusic = findViewById(R.id.progressBarLoadingMusic);
+
+        firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
     /*public FirestoreRecyclerOptions getSongsOnline(LifecycleOwner lifecycleOwner) {

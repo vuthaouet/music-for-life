@@ -8,9 +8,13 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.musicplayerapp.Format.Format;
+
 public class CreateNewAlbum extends AppCompatActivity {
     EditText editTextAlbumName;
     Button buttonAlbumName;
+
+    String newAlbumName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +29,9 @@ public class CreateNewAlbum extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.setAction("UpdateAlbum");
-                intent.putExtra("createNewAlbum", editTextAlbumName.getText().toString());
+
+                newAlbumName = editTextAlbumName.getText().toString();
+                intent.putExtra("createNewAlbum", Format.formatName(newAlbumName));
                 startActivity(intent);
             }
         });

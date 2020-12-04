@@ -2,6 +2,7 @@ package com.example.musicplayerapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,8 +17,9 @@ import com.example.musicplayerapp.Database.DatabaseHelper;
 import com.example.musicplayerapp.Entity.MusicFiles;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.example.musicplayerapp.MainActivity.albumFiles;
+//import static com.example.musicplayerapp.MainActivity.albumFiles;
 
 public class AlbumDetails extends AppCompatActivity {
     RecyclerView recyclerView;
@@ -25,8 +27,10 @@ public class AlbumDetails extends AppCompatActivity {
     ImageView albumPhoto, backBtnAlbum, showAction;
     String albumNameIntent;
 
-    ArrayList<MusicFiles> albumSongs;
-    AlbumDetailsAdapter albumDetailsAdapter;
+    private List<MusicFiles> albumSongs;
+    private AlbumDetailsAdapter albumDetailsAdapter;
+
+    private DatabaseHelper databaseHelper = new DatabaseHelper(AlbumDetails.this);
 
     int albumIndex = -1;
 
@@ -35,9 +39,7 @@ public class AlbumDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_details);
 
-        albumSongs = new ArrayList<>();
-
-        albumIndex = getIntent().getIntExtra("albumIndex", -1);
+        //albumIndex = getIntent().getIntExtra("albumIndex", -1);
 
         recyclerView = findViewById(R.id.recyclerView);
         albumPhoto = findViewById(R.id.albumPhoto);
@@ -45,9 +47,15 @@ public class AlbumDetails extends AppCompatActivity {
         backBtnAlbum = findViewById(R.id.back_btn_album);
         showAction = findViewById(R.id.menu_btn_album);
 
-        albumNameIntent = albumFiles.get(albumIndex).get(0).getAlbum();
+        //albumNameIntent = albumFiles.get(albumIndex).get(0).getAlbum();
+        albumNameIntent = getIntent().getStringExtra("albumName").trim();
+        albumName.setText(albumNameIntent);
 
-        albumSongs.addAll(albumFiles.get(albumIndex));
+        Log.d("sqlite", "onCreate: " + databaseHelper.getFilesFromAlbum(albumNameIntent).toString());
+
+        albumSongs = databaseHelper.getFilesFromAlbum(albumNameIntent);
+
+        /*albumSongs.addAll(albumFiles.get(albumIndex));
         albumSongs.remove(0);
 
         if (albumSongs.isEmpty()) {
@@ -68,7 +76,7 @@ public class AlbumDetails extends AppCompatActivity {
 
             byte[] image = MusicAdapter.getAlbumArt(albumSongs.get(0).getPath());
             MusicAdapter.setImage(image, this, albumPhoto);
-        }
+        }*/
 
         backBtnAlbum.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,15 +100,15 @@ public class AlbumDetails extends AppCompatActivity {
                     public boolean onMenuItemClick(MenuItem menuItem) {
                         switch (menuItem.getItemId()) {
                             case R.id.deleteAlbum:
-                                intent[0].setAction("Delete album");
-                                intent[0].putExtra("albumIndex", albumIndex);
+                                intent[0].setAction("DeleteAlbum");
+                                intent[0].putExtra("albumName", albumNameIntent);
                                 startActivity(intent[0]);
                                 break;
                             case R.id.addToAlbum:
                                 intent[0] = new Intent(getApplicationContext(), MainActivity.class);
-                                intent[0].setAction("Add to album");
-                                intent[0].putExtra("albumIndex", albumIndex);
-                                intent[0].putExtra("albumName", albumNameIntent);
+                                intent[0].setAction("AddToAlbum");
+                                //intent[0].putExtra("albumIndex", albumIndex);
+                                intent[0].putExtra("albumNameAdded", albumNameIntent);
                                 startActivity(intent[0]);
                                 break;
                         }
@@ -111,9 +119,9 @@ public class AlbumDetails extends AppCompatActivity {
         });
     }
 
-    private boolean getFromDatabase(final ArrayList<MusicFiles> albumSongs, final String albumNameIntent) {
+    /*private boolean getFromDatabase(final ArrayList<MusicFiles> albumSongs, final String albumNameIntent) {
         DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
-        /*albumSongs.addAll(databaseHelper.getFilesFromAlbum(albumNameIntent));*/
+        *//*albumSongs.addAll(databaseHelper.getFilesFromAlbum(albumNameIntent));*//*
 
         for (int i = 0; i < albumFiles.size(); i++) {
             if (albumFiles.get(i).get(0).getAlbum() == albumNameIntent) {
@@ -122,13 +130,13 @@ public class AlbumDetails extends AppCompatActivity {
             }
         }
         return true;
-    }
+    }*/
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (albumSongs.size() > 1) {
-            albumDetailsAdapter = new AlbumDetailsAdapter(this, albumSongs, albumIndex);
+        if (albumSongs.size() > 0) {
+            albumDetailsAdapter = new AlbumDetailsAdapter(this, albumSongs, albumNameIntent);
             recyclerView.setAdapter(albumDetailsAdapter);
             recyclerView.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         }

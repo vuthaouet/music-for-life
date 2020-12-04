@@ -22,13 +22,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.musicplayerapp.Database.DatabaseHelper;
 import com.example.musicplayerapp.Entity.MusicFiles;
 import com.example.musicplayerapp.Services.OnClearFromRecentService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.example.musicplayerapp.MainActivity.albumFiles;
+//import static com.example.musicplayerapp.MainActivity.albumFiles;
 import static com.example.musicplayerapp.MainActivity.controlMusicPlayerFromMain;
 import static com.example.musicplayerapp.MainActivity.musicFiles;
 import static com.example.musicplayerapp.MainActivity.playOnline;
@@ -40,7 +43,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
     static int position = -1;
     static String tempSongName;
-    static ArrayList<MusicFiles> listSongs = new ArrayList<>();
+    static List<MusicFiles> listSongs = new ArrayList<>();
     static Uri uri;
     static MediaPlayer mediaPlayer;
     static boolean shufferBoolean = false, repeatBoolean = false;
@@ -56,37 +59,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     private Handler handler = new Handler();
     private boolean readyToListen;
 
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = "";
-            if (readyToListen) {
-                action = intent.getExtras().getString("actionname");
-                readyToListen = false;
-            }
-
-            switch (action) {
-                case CreateNotification.ACTION_PREVIOUS:
-                    id_prevClicked();
-                    break;
-                case CreateNotification.ACTION_PLAY:
-                    play_pauseClicked();
-                    break;
-                case CreateNotification.ACTION_NEXT:
-                    id_nextClicked();
-                    break;
-                case CreateNotification.CLOSE_NOTIFICATION:
-                    notificationManager.cancelAll();
-                    play_pause.setImageResource(R.drawable.ic_baseline_play_arrow);
-                    if (play_pause_main != null) {
-                        play_pause_main.setImageResource(R.drawable.ic_baseline_play_arrow);
-                    }
-                    mediaPlayer.pause();
-                default:
-                    break;
-            }
-        }
-    };
+    private DatabaseHelper databaseHelper = new DatabaseHelper(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +69,11 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
         playOnline = false;
 
-        continuePlayingMusic();
-        initAnim();
+        //continuePlayingMusic();
+        //initAnim();
+
+        getIntentMethod();
+
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -163,7 +139,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         }
     }
 
-    private void continuePlayingMusic() {
+    private void continuePlayingMusic() throws IOException {
         if (tempSongName != null && getIntent().getStringExtra("songName") != null) {
             if (getIntent().getStringExtra("songName").equals(tempSongName)) {
                 if (mediaPlayer != null) {
@@ -229,12 +205,23 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     }
 
     private void getIntentMethod() {
-        if (getIntent().getStringExtra("playAlbum") != null) {
-            listSongs.clear();
+        if (getIntent().getAction() != null) {
+            switch (getIntent().getAction()) {
+                case "playAlbum":
+                    listSongs.clear();
+                    String albumName = getIntent().getStringExtra("albumNamePlayed");
+                    int index = getIntent().getIntExtra("songIndexPlayed", -1);
+                    listSongs = databaseHelper.getFilesFromAlbum(albumName);
+                    position = index;
+                    break;
+                default:
+                    break;
+            }
+            //listSongs.clear();
 
-            position = getIntent().getIntExtra("songIndex", -1);
-            listSongs.addAll(albumFiles.get(getIntent().getIntExtra("albumIndex", -1)));
-            listSongs.remove(0);
+            //position = getIntent().getIntExtra("songIndex", -1);
+            //listSongs.addAll(albumFiles.get(getIntent().getIntExtra("albumIndex", -1)));
+            //listSongs.remove(0);
         } else {
             position = getIntent().getIntExtra("position", -1);
             listSongs = musicFiles;
@@ -248,26 +235,31 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
             uri = Uri.parse(listSongs.get(position).getPath());
         }
+
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            mediaPlayer.start();
+            readyToListen = true;
+            /*mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mediaPlayer.start();
                     readyToListen = true;
                 }
-            });
+            });*/
         } else {
             mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
-            mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            mediaPlayer.start();
+            readyToListen = true;
+            /*mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     mediaPlayer.start();
                     readyToListen = true;
                 }
-            });
+            });*/
         }
 
         repeatBoolean = false;
@@ -297,7 +289,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         retriever.setDataSource(uri.toString());
 
         byte[] art = retriever.getEmbeddedPicture();*/
-        MusicAdapter.setImage(MusicAdapter.getAlbumArt(uri.toString()), getApplicationContext(), cover_art);
+        //MusicAdapter.setImage(MusicAdapter.getAlbumArt(uri.toString()), getApplicationContext(), cover_art);
 
         int totalTime = mediaPlayer.getDuration() / 1000;
 
@@ -388,44 +380,46 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
         play_pause.setImageResource(R.drawable.ic_baseline_pause);
 
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        /*mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 mediaPlayer.start();
                 readyToListen = true;
             }
-        });
+        });*/
+        mediaPlayer.start();
+        readyToListen = true;
 
         if (song_artist_main != null && song_name_main != null) {
             controlMusicPlayerFromMain(getApplicationContext());
         }
 
         metaData(uri);
-        anim.cancel();
-        anim.start();
+        //anim.cancel();
+        //anim.start();
     }
 
     private void play_pauseClicked() {
         if (mediaPlayer.isPlaying()) {
             CreateNotification.createNotification(getBaseContext(), R.drawable.ic_baseline_play_arrow, listSongs.get(position));
-            if (play_pause_main != null) {
+            /*if (play_pause_main != null) {
                 play_pause_main.setImageResource(R.drawable.ic_baseline_play_arrow);
-            }
+            }*/
             play_pause.setImageResource(R.drawable.ic_baseline_play_arrow);
             mediaPlayer.pause();
 
             runOnUiThread();
-            anim.pause();
+            //anim.pause();
         } else {
             CreateNotification.createNotification(getBaseContext(), R.drawable.ic_baseline_pause, listSongs.get(position));
-            if (play_pause_main != null) {
+            /*if (play_pause_main != null) {
                 play_pause_main.setImageResource(R.drawable.ic_baseline_pause);
-            }
+            }*/
             play_pause.setImageResource(R.drawable.ic_baseline_pause);
             mediaPlayer.start();
 
             runOnUiThread();
-            anim.resume();
+            //anim.resume();
         }
     }
 
@@ -446,13 +440,15 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
         play_pause.setImageResource(R.drawable.ic_baseline_pause);
         CreateNotification.createNotification(getBaseContext(), R.drawable.ic_baseline_pause, listSongs.get(position));
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        /*mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 mediaPlayer.start();
                 readyToListen = true;
             }
-        });
+        });*/
+        mediaPlayer.start();
+        readyToListen = true;
 
         if (song_artist_main != null && song_name_main != null) {
             controlMusicPlayerFromMain(getApplicationContext());
@@ -460,8 +456,8 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         cover_art.clearAnimation();
 
         metaData(uri);
-        anim.cancel();
-        anim.start();
+        //anim.cancel();
+        //anim.start();
     }
 
     @Override
@@ -518,6 +514,37 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         } else {
             anim.start();
         }
-
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = "";
+            if (readyToListen) {
+                action = intent.getExtras().getString("actionname");
+                readyToListen = false;
+            }
+            switch (action) {
+                case CreateNotification.ACTION_PREVIOUS:
+                    id_prevClicked();
+                    break;
+                case CreateNotification.ACTION_PLAY:
+                    play_pauseClicked();
+                    break;
+                case CreateNotification.ACTION_NEXT:
+                    id_nextClicked();
+                    break;
+                case CreateNotification.CLOSE_NOTIFICATION:
+                    notificationManager.cancelAll();
+                    play_pause.setImageResource(R.drawable.ic_baseline_play_arrow);
+                    readyToListen = true;
+                    /*if (play_pause_main != null) {
+                        play_pause_main.setImageResource(R.drawable.ic_baseline_play_arrow);
+                    }*/
+                    mediaPlayer.pause();
+                default:
+                    break;
+            }
+        }
+    };
 }

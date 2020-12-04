@@ -14,15 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.musicplayerapp.Entity.MusicFiles;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.example.musicplayerapp.MainActivity.albumFiles;
+//import static com.example.musicplayerapp.MainActivity.albumFiles;
 
 public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder> {
     View view;
+    private List<String> albumName;
     private Context mContext;
 
-    public AlbumAdapter(Context mContext, ArrayList<ArrayList<MusicFiles>> albumFiles) {
+    public AlbumAdapter(Context mContext, List<String> albumFiles) {
         this.mContext = mContext;
+        this.albumName = albumFiles;
     }
 
     @NonNull
@@ -34,20 +37,23 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull AlbumAdapter.MyViewHolder holder, final int position) {
-        holder.album_name.setText(albumFiles.get(position).get(0).getAlbum());
+        //holder.album_name.setText(albumFiles.get(position).get(0).getAlbum());
+        final String album_name = albumName.get(position);
+        holder.album_name.setText(album_name);
 
-        if (albumFiles.get(position).size() <= 1) {
+        /*if (albumFiles.get(position).size() <= 1) {
             MusicAdapter.setImage(null, mContext, holder.album_image);
         } else {
             byte[] image = MusicAdapter.getAlbumArt(albumFiles.get(position).get(1).getPath());
             MusicAdapter.setImage(image, mContext, holder.album_image);
-        }
+        }*/
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, AlbumDetails.class);
-                intent.putExtra("albumIndex", position);
+                //intent.putExtra("albumIndex", position);
+                intent.putExtra("albumName", album_name);
                 mContext.startActivity(intent);
             }
         });
@@ -55,10 +61,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        if (albumFiles != null) {
-            return albumFiles.size();
-        }
-        return 0;
+        return albumName.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

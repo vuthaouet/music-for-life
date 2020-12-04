@@ -13,14 +13,19 @@ import androidx.annotation.Nullable;
 import com.example.musicplayerapp.Entity.MusicFiles;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
+
+    private static final String ID = "ID";
     private static final String MUSIC_TITLE = "MUSIC_TITLE";
     private static final String MUSIC_ARTIST = "MUSIC_ARTIST";
     private static final String MUSIC_PATH = "MUSIC_PATH";
     private static final String MUSIC_DURATION = "MUSIC_DURATION";
     private static final String MUSIC_ALBUM = "MUSIC_ALBUM";
-    private static final String ID = "ID";
+    private static final String ID_OFF = "ID_OFF";
+
+    List<String> forbiddenName = new ArrayList<>();
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, "musicPlayerApp.db", null, 1);
@@ -42,6 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         String createTableStatement = "CREATE TABLE " + ALBUM_TITLE + " ( " +
                 ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                ID_OFF + " TEXT, " +
                 MUSIC_PATH + " TEXT, " +
                 MUSIC_TITLE + " TEXT, " +
                 MUSIC_ARTIST + " TEXT, " +
@@ -58,19 +64,60 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return true;
     }
 
-    /*public void deleteAlbum(String albumName) {
+    public ArrayList<String> getAllTableName() {
+        forbiddenName.add("sqlite_sequence");
+        forbiddenName.add("android_metadata");
+
+        ArrayList<String> arrTblNames = new ArrayList<String>();
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        Cursor c = sqLiteDatabase.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+
+        if (c.moveToFirst()) {
+            while (!c.isAfterLast()) {
+                String name = c.getString(c.getColumnIndex("name"));
+                if (!forbiddenName.contains(name.trim()))
+                    arrTblNames.add(name);
+                c.moveToNext();
+            }
+            Log.d("sqlite", "getAllTableName: Done");
+        }
+
+        sqLiteDatabase.close();
+        return arrTblNames;
+    }
+
+    public boolean deleteAlbum(String albumName) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
         String deleteAlbumQuery = "DROP TABLE IF EXISTS " + albumName;
         sqLiteDatabase.execSQL(deleteAlbumQuery);
-
-        String deleteFromTable = "DELETE FROM " + ALBUM_MANAGER + " WHERE " + ALBUM_NAME + " = '" + albumName + "';";
-        sqLiteDatabase.execSQL(deleteFromTable);
+        Log.d("sqlite", "deleteAlbum: Done");
 
         sqLiteDatabase.close();
+        return true;
     }
 
-    public synchronized boolean addOne(String ALBUM_TITLE, MusicFiles musicFiles) {
+    public boolean deleteSongFromAlbum(String albumName, String songName) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        String query = "DELETE FROM " + albumName + " WHERE " + MUSIC_TITLE + " = \"" + songName + "\"";
+        sqLiteDatabase.execSQL(query);
+        Log.d("sqlite", "deleteSongFromAlbum: Done " + query);
+
+        sqLiteDatabase.close();
+        return true;
+    }
+
+    public boolean deleteSongFromAllAlbum(String songName) {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        for (String name : getAllTableName()) {
+            if (!deleteSongFromAlbum(name, songName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean addOne(String ALBUM_TITLE, MusicFiles musicFiles) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
@@ -79,6 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         contentValues.put(MUSIC_ARTIST, musicFiles.getArtist());
         contentValues.put(MUSIC_ALBUM, musicFiles.getAlbum());
         contentValues.put(MUSIC_DURATION, musicFiles.getDuration());
+        contentValues.put(ID_OFF, musicFiles.getId_off());
 
         long insert = sqLiteDatabase.insert(ALBUM_TITLE, null, contentValues);
 
@@ -89,7 +137,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public synchronized ArrayList<ArrayList<MusicFiles>> getAllAlbumFiles() {
+    public boolean addMany(String ALBUM_TITLE, List<MusicFiles> musicFilesList) {
+        for (MusicFiles musicFiles : musicFilesList) {
+            boolean success = this.addOne(ALBUM_TITLE, musicFiles);
+            if (!success) {
+                return false;
+            }
+        }
+        Log.d("sqlite", "addMany: Done");
+        return true;
+    }
+
+    /*public synchronized ArrayList<ArrayList<MusicFiles>> getAllAlbumFiles() {
         ArrayList<ArrayList<MusicFiles>> selfMadeAlbum = new ArrayList<>();
 
         String queryString = "SELECT * FROM " + ALBUM_MANAGER;
@@ -109,31 +168,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         sqLiteDatabase.close();
 
         return selfMadeAlbum;
-    }
+    }*/
 
-    public ArrayList<MusicFiles> getFilesFromAlbum(String ALBUM_NAME) {
-        ArrayList<MusicFiles> filesFromAlbum = new ArrayList<>();
+    public List<MusicFiles> getFilesFromAlbum(String ALBUM_NAME) {
+        List<MusicFiles> filesFromAlbum = new ArrayList<>();
 
-        String queryString = "SELECT * FROM " + ALBUM_NAME;
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        String queryString = "SELECT * FROM " + ALBUM_NAME;
 
         Cursor cursor = sqLiteDatabase.rawQuery(queryString, null);
 
         while (cursor.moveToNext()) {
+            String id_off = cursor.getString(1);
+            String path = cursor.getString(2);
+            String title = cursor.getString(3);
+            String album = cursor.getString(4);
+            String artist = cursor.getString(5);
+            String duration = cursor.getString(6);
 
-            String path = cursor.getString(1);
-            String title = cursor.getString(2);
-            String album = cursor.getString(3);
-            String artist = cursor.getString(4);
-            String duration = cursor.getString(5);
-
-            MusicFiles musicFiles = new MusicFiles(path, title, artist, album, duration);
+            MusicFiles musicFiles = new MusicFiles(path, title, artist, album, duration, id_off);
             filesFromAlbum.add(musicFiles);
         }
 
         cursor.close();
         sqLiteDatabase.close();
+        Log.d("sqlite", "getFilesFromAlbum: Done");
 
         return filesFromAlbum;
-    }*/
+    }
 }

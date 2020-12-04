@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,10 +21,12 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 public class FirestoreAdapter extends FirestoreRecyclerAdapter<MusicFiles, FirestoreAdapter.ProductsViewHolder> {
     private Context fContext;
+    private ProgressBar progressBarLoadingMusic;
 
-    public FirestoreAdapter(@NonNull FirestoreRecyclerOptions<MusicFiles> options, Context context) {
+    public FirestoreAdapter(@NonNull FirestoreRecyclerOptions<MusicFiles> options, Context context, ProgressBar progressBar) {
         super(options);
         this.fContext = context;
+        this.progressBarLoadingMusic = progressBar;
     }
 
     static void setImage(String url, Context context, ImageView imageView) {
@@ -51,6 +54,7 @@ public class FirestoreAdapter extends FirestoreRecyclerAdapter<MusicFiles, Fires
                 Intent intent = new Intent(fContext, PlayerActivityOnline.class);
                 intent.putExtra("songIndexOnl", position);
                 fContext.startActivity(intent);
+                progressBarLoadingMusic.setVisibility(View.VISIBLE);
             }
         });
     }

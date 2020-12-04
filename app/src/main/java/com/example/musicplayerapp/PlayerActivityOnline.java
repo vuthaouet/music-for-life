@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.musicplayerapp.Database.DownloadFile;
 import com.example.musicplayerapp.Entity.Comments;
 import com.example.musicplayerapp.Entity.MusicFiles;
 import com.example.musicplayerapp.Services.OnClearFromRecentService;
@@ -69,37 +70,7 @@ public class PlayerActivityOnline extends AppCompatActivity implements MediaPlay
 
     private Handler handler = new Handler();
     private boolean readyToListen = true;
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = "";
-            if (readyToListen) {
-                action = intent.getExtras().getString("actionnameonl");
-                readyToListen = false;
-            }
 
-            switch (action) {
-                case CreateNotification.ACTION_PREVIOUS:
-                    id_prevClickedOnl();
-                    break;
-                case CreateNotification.ACTION_PLAY:
-                    play_pauseClickedOnl();
-                    break;
-                case CreateNotification.ACTION_NEXT:
-                    id_nextClickedOnl();
-                    break;
-                default:
-                    break;
-                /*case CreateNotification.CLOSE_NOTIFICATION:
-                    notificationManager.cancelAll();
-                    play_pause.setImageResource(R.drawable.ic_baseline_play_arrow);
-                    if (play_pause_main != null) {
-                        play_pause_main.setImageResource(R.drawable.ic_baseline_play_arrow);
-                    }
-                    mediaPlayerOnline.pause();*/
-            }
-        }
-    };
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore firebaseFirestore;
 
@@ -184,7 +155,10 @@ public class PlayerActivityOnline extends AppCompatActivity implements MediaPlay
                                 Toast.makeText(PlayerActivityOnline.this, "Delete Clicked", Toast.LENGTH_SHORT).show();
                                 break;
                             case R.id.download:
-                                downloadByLink();
+                                String name = listSongsOnline.get(positionOnl).getTitle();
+                                String link = listSongsOnline.get(positionOnl).getLink();
+                                DownloadFile.downloadByLink(name, link, PlayerActivityOnline.this);
+
                                 break;
                             case R.id.comment:
                                 postComment();
@@ -245,28 +219,6 @@ public class PlayerActivityOnline extends AppCompatActivity implements MediaPlay
                 Log.d("cmt", "onComplete: Done");
             }
         });
-    }
-
-    private void downloadByLink() {
-        String name = listSongsOnline.get(positionOnl).getTitle();
-        String link = listSongsOnline.get(positionOnl).getLink();
-        String path = String.valueOf(Environment.getExternalStorageDirectory());
-
-        downloadFile(PlayerActivityOnline.this, name, ".mp3", path, link);
-    }
-
-    private void downloadFile(Context context, String filename, String fileExt, String destination, String url) {
-        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-        Uri uri = Uri.parse(url);
-
-        DownloadManager.Request request = new DownloadManager.Request(uri);
-
-        //request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_ONLY_COMPLETION);
-        //request.setDestinationInExternalFilesDir(context, destination, filename + fileExt);
-        request.setDestinationInExternalPublicDir(destination, filename + fileExt);
-
-        downloadManager.enqueue(request);
     }
 
     protected void onResume() {
@@ -459,17 +411,17 @@ public class PlayerActivityOnline extends AppCompatActivity implements MediaPlay
     }
 
     private void showNotification() {
-        /*if (mediaPlayerOnline != null) {
-            if (mediaPlayerOnline.isPlaying()) {
-                CreateNotification.createNotification(getApplicationContext(), R.drawable.ic_baseline_pause, listSongsOnline.get(position));
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                CreateNotification.createNotification(getApplicationContext(), R.drawable.ic_baseline_pause, listSongsOnline.get(positionOnl));
             } else {
-                CreateNotification.createNotification(getApplicationContext(), R.drawable.ic_baseline_play_arrow, listSongsOnline.get(position));
+                CreateNotification.createNotification(getApplicationContext(), R.drawable.ic_baseline_play_arrow, listSongsOnline.get(positionOnl));
             }
         } else {
-            CreateNotification.createNotification(getApplicationContext(), R.drawable.ic_baseline_pause, listSongsOnline.get(position));
-        }*/
+            CreateNotification.createNotification(getApplicationContext(), R.drawable.ic_baseline_pause, listSongsOnline.get(positionOnl));
+        }
 
-        CreateNotification.createNotification(getBaseContext(), R.drawable.ic_baseline_pause, listSongsOnline.get(positionOnl));
+        //CreateNotification.createNotification(getBaseContext(), R.drawable.ic_baseline_pause, listSongsOnline.get(positionOnl));
     }
 
     private void createChannel() {
@@ -508,4 +460,41 @@ public class PlayerActivityOnline extends AppCompatActivity implements MediaPlay
 
         unregisterReceiver(broadcastReceiver);
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = "";
+            if (readyToListen) {
+                action = intent.getExtras().getString("actionnameonl");
+                readyToListen = false;
+            }
+
+            switch (action) {
+                case CreateNotification.ACTION_PREVIOUS:
+                    id_prevClickedOnl();
+                    break;
+                case CreateNotification.ACTION_PLAY:
+                    play_pauseClickedOnl();
+                    break;
+                case CreateNotification.ACTION_NEXT:
+                    id_nextClickedOnl();
+                    break;
+                case CreateNotification.CLOSE_NOTIFICATION:
+                    notificationManager.cancelAll();
+                    play_pause.setImageResource(R.drawable.ic_baseline_play_arrow);
+                    readyToListen = true;
+                    mediaPlayer.pause();
+                default:
+                    break;
+                /*case CreateNotification.CLOSE_NOTIFICATION:
+                    notificationManager.cancelAll();
+                    play_pause.setImageResource(R.drawable.ic_baseline_play_arrow);
+                    if (play_pause_main != null) {
+                        play_pause_main.setImageResource(R.drawable.ic_baseline_play_arrow);
+                    }
+                    mediaPlayerOnline.pause();*/
+            }
+        }
+    };
 }

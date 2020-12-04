@@ -9,13 +9,15 @@ public class MusicFiles {
     private String album;
     private String duration;
     private String image = "";
+    private String id_off;
 
-    public MusicFiles(String path, String title, String artist, String album, String duration) {
+    public MusicFiles(String path, String title, String artist, String album, String duration, String id_off) {
         this.path = path;
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.duration = duration;
+        this.id_off = id_off;
     }
 
     public MusicFiles(String title, String artist, String link) {
@@ -24,14 +26,14 @@ public class MusicFiles {
         this.link = link;
     }
 
-    public MusicFiles(String link, String path, String title, String artist, String album, String duration) {
+    /*public MusicFiles(String link, String path, String title, String artist, String album, String duration) {
         this.link = link;
         this.path = path;
         this.title = title;
         this.artist = artist;
         this.album = album;
         this.duration = duration;
-    }
+    }*/
 
     public MusicFiles() {
 
@@ -99,5 +101,13 @@ public class MusicFiles {
 
     public void setImage(String images) {
         this.image = images;
+    }
+
+    public String getId_off() {
+        return id_off;
+    }
+
+    public void setId_off(String id_off) {
+        this.id_off = id_off;
     }
 }
