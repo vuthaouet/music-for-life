@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.musicplayerapp.Entity.MusicFiles;
-import com.example.musicplayerapp.PlayerActivityOnline;
+import com.example.musicplayerapp.PlayMusic.PlayerActivityOnline;
 import com.example.musicplayerapp.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;

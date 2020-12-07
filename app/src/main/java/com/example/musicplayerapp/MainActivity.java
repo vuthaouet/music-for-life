@@ -2,7 +2,6 @@ package com.example.musicplayerapp;
 
 import android.Manifest;
 import android.app.DownloadManager;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -35,28 +34,29 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.bumptech.glide.Glide;
 import com.example.musicplayerapp.Authenticate.Login;
 import com.example.musicplayerapp.Authenticate.UserInfor;
 import com.example.musicplayerapp.Database.DatabaseHelper;
 import com.example.musicplayerapp.Database.Firestore;
 import com.example.musicplayerapp.Entity.MusicFiles;
 import com.example.musicplayerapp.Format.Format;
+import com.example.musicplayerapp.Fragment.AlbumFragment;
+import com.example.musicplayerapp.Fragment.SongsFragment;
+import com.example.musicplayerapp.PlayMusic.PlayerActivity;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-//import static com.example.musicplayerapp.MusicAdapter.isCheckedList;
-import static com.example.musicplayerapp.MusicAdapter.songIsChecked;
-import static com.example.musicplayerapp.PlayerActivity.listSongs;
-import static com.example.musicplayerapp.PlayerActivity.mediaPlayer;
-import static com.example.musicplayerapp.PlayerActivity.position;
-import static com.example.musicplayerapp.PlayerActivity.tempSongName;
-import static com.example.musicplayerapp.PlayerActivity.uri;
-import static com.example.musicplayerapp.SongsFragment.musicAdapter;
+//import static com.example.musicplayerapp.Adapter.MusicAdapter.isCheckedList;
+import static com.example.musicplayerapp.Adapter.MusicAdapter.songIsChecked;
+import static com.example.musicplayerapp.PlayMusic.PlayerActivity.listSongs;
+import static com.example.musicplayerapp.PlayMusic.PlayerActivity.mediaPlayer;
+import static com.example.musicplayerapp.PlayMusic.PlayerActivity.position;
+import static com.example.musicplayerapp.PlayMusic.PlayerActivity.tempSongName;
+import static com.example.musicplayerapp.PlayMusic.PlayerActivity.uri;
+import static com.example.musicplayerapp.Fragment.SongsFragment.musicAdapter;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public static final int REQUEST_CODE = 1;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     static ImageView play_pause_main;
     static ImageView id_next_main;
 
-    static boolean addToAlbumScreen = false;
+    public static boolean addToAlbumScreen = false;
 
     private DatabaseHelper databaseHelper;
     private String MY_SORT_PREF = "SortOrder";

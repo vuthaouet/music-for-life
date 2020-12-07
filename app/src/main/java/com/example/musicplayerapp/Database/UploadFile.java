@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -90,6 +91,7 @@ public class UploadFile extends AppCompatActivity {
             Intent intent = new Intent();
             intent.setType("audio/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
+
             startActivityForResult(Intent.createChooser(intent, "Select a song"), 1);
 
             progressBarUploading.setVisibility(View.VISIBLE);
@@ -108,15 +110,14 @@ public class UploadFile extends AppCompatActivity {
                 //the selected audio.
                 Uri uri = data.getData();
                 String songName = nameNewSong.getText().toString();
-                updateContentResolver(uri, firebaseUser, data.getPackage());
+                updateContentResolver(uri, firebaseUser);
                 uploadSong(uri, songName, firebaseUser);
             }
         }
     }
 
-    private void updateContentResolver(Uri uri, FirebaseUser user, String aPackage) {
+    private void updateContentResolver(Uri uri, FirebaseUser user) {
         ContentValues contentValues = new ContentValues();
-
         contentValues.put(MediaStore.Audio.Media.ARTIST, user.getDisplayName());
 
         //grantUriPermission(aPackage + , uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);

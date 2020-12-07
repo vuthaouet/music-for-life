@@ -11,11 +11,14 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.musicplayerapp.Entity.MusicFiles;
+import com.example.musicplayerapp.PlayMusic.PlayerActivity;
+import com.example.musicplayerapp.PlayMusic.PlayerActivityOnline;
+import com.example.musicplayerapp.R;
 import com.example.musicplayerapp.Services.NotificationActionService;
 
 import static com.example.musicplayerapp.MainActivity.playOnline;
-import static com.example.musicplayerapp.PlayerActivity.position;
-import static com.example.musicplayerapp.PlayerActivityOnline.positionOnl;
+import static com.example.musicplayerapp.PlayMusic.PlayerActivity.position;
+import static com.example.musicplayerapp.PlayMusic.PlayerActivityOnline.positionOnl;
 
 public class CreateNotification {
     public static final String CHANNEL_ID = "channel1";

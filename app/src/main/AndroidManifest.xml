@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.musicplayerapp">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.MANAGE_DOCUMENTS"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -31,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".PlayerActivityOnline" />
+        <activity android:name=".PlayMusic.PlayerActivityOnline" />
         <activity
             android:name=".Database.Firestore"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
@@ -42,7 +41,7 @@
             android:name=".AlbumDetails"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".PlayerActivity"
+            android:name=".PlayMusic.PlayerActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
 
         <receiver android:name=".Services.NotificationActionService" />
