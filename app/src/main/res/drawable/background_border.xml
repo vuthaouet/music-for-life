@@ -8,10 +8,10 @@
 
     <!-- Optional, round your corners -->
     <corners
-        android:bottomLeftRadius="0dp"
-        android:bottomRightRadius="0dp"
-        android:topLeftRadius="0dp"
-        android:topRightRadius="0dp" />
+        android:bottomLeftRadius="20dp"
+        android:bottomRightRadius="20dp"
+        android:topLeftRadius="20dp"
+        android:topRightRadius="20dp" />
 
     <!-- Optional, fill the rest of your background with a color or gradient, use transparent if you only want the border to be displayed-->
     <gradient
