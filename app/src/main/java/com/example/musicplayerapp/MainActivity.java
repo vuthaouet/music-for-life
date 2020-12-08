@@ -32,10 +32,17 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.example.musicplayerapp.Authenticate.Login;
+import com.example.musicplayerapp.Authenticate.UserInfor;
 import com.example.musicplayerapp.Database.DatabaseHelper;
+import com.example.musicplayerapp.Database.Firestore;
+import com.example.musicplayerapp.Entity.MusicFiles;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static com.example.musicplayerapp.MusicAdapter.isCheckedList;
 import static com.example.musicplayerapp.PlayerActivity.listSongs;
@@ -49,8 +56,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     public static final int REQUEST_CODE = 1;
 
-    static ArrayList<MusicFiles> musicFiles;
+    public static boolean playOnline;
     public static ArrayList<ArrayList<MusicFiles>> albumFiles;
+    public static ArrayList<MusicFiles> musicFiles;
+
+    private List<Map<String, MusicFiles[]>> musicFromSQL;
 
     static TextView song_name_main;
     static TextView song_artist_main;
@@ -62,14 +72,11 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     static boolean addToAlbumScreen = false;
 
+    private DatabaseHelper databaseHelper;
     private String MY_SORT_PREF = "SortOrder";
-
     private ViewPager viewPager;
     private TabLayout tabLayout;
-
     private String albumName;
-
-    DatabaseHelper databaseHelper;
 
     public static void controlMusicPlayerFromMain(final Context context) {
         song_name_main.setText(listSongs.get(position).getTitle());
@@ -165,35 +172,33 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        viewPagerAdapter.addFragments(new SongsFragment(), "Bài hát");
+        viewPagerAdapter.addFragments(new SongsFragment(), "Songs");
         viewPagerAdapter.addFragments(new AlbumFragment(), "Albums");
-        viewPagerAdapter.addFragments(new ProfileFragment(), "Cá nhân");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_music_song);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_album);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_profile);
-
-
         databaseHelper = new DatabaseHelper(MainActivity.this);
+        musicFromSQL = new ArrayList<Map<String, MusicFiles[]>>();
 
         musicFiles = getAllAudio(this);
 
-        if (albumFiles == null) {
-            albumFiles = categorizeByAlbum(musicFiles);
-            albumFiles.addAll(databaseHelper.getAllAlbumFiles());
+        /*if (albumFiles == null) {
+            //albumFiles = categorizeByAlbum(musicFiles);
+            //albumFiles.addAll(databaseHelper.getAllAlbumFiles());
         } else {
             if (getIntent().getAction() != null) {
                 switch (getIntent().getAction()) {
-                    case "Update album":
-                        albumFiles.add(databaseHelper.createUserTable(
-                                getIntent().getStringExtra("createNewAlbum")));
+                    case "UpdateAlbum":
+                        *//*albumFiles.add(databaseHelper.createUserTable(
+                                getIntent().getStringExtra("createNewAlbum")));*//*
+                        String nameAlbum = getIntent().getStringExtra("createNewAlbum");
+                        Log.d("sqlite", "initViewPage: " + nameAlbum);
+                        boolean success = databaseHelper.createUserTable(nameAlbum);
+                        Log.d("sqlite", "initViewPage: " + success);
                         break;
-                    case "Delete album":
+                    *//*case "Delete album":
                         viewPager.setCurrentItem(1, false);
-
                         int index = getIntent().getIntExtra("albumIndex", -1);
                         databaseHelper.deleteAlbum(albumFiles.get(index).get(0).getAlbum());
                         albumFiles.remove(index);
@@ -201,15 +206,41 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     case "Add to album":
                         addToAlbumScreen = true;
                         albumName = getIntent().getStringExtra("albumName");
-                        break;
+                        break;*//*
                     case "toAlbumFragment":
                         viewPager.setCurrentItem(1, false);
                         break;
                 }
             }
+        }*/
+
+        if (getIntent().getAction() != null) {
+            switch (getIntent().getAction()) {
+                case "UpdateAlbum":
+                        /*albumFiles.add(databaseHelper.createUserTable(
+                                getIntent().getStringExtra("createNewAlbum")));*/
+                    String nameAlbum = getIntent().getStringExtra("createNewAlbum");
+                    Log.d("sqlite", "initViewPage: " + nameAlbum);
+                    boolean success = databaseHelper.createUserTable(nameAlbum);
+                    Log.d("sqlite", "initViewPage: " + success);
+                    break;
+                    /*case "Delete album":
+                        viewPager.setCurrentItem(1, false);
+                        int index = getIntent().getIntExtra("albumIndex", -1);
+                        databaseHelper.deleteAlbum(albumFiles.get(index).get(0).getAlbum());
+                        albumFiles.remove(index);
+                        break;
+                    case "Add to album":
+                        addToAlbumScreen = true;
+                        albumName = getIntent().getStringExtra("albumName");
+                        break;*/
+                case "toAlbumFragment":
+                    viewPager.setCurrentItem(1, false);
+                    break;
+            }
         }
 
-        if (mediaPlayer != null) {
+        if (mediaPlayer != null && 1 == 2) {
             addPlayingSongLayout();
         }
     }
@@ -310,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         String userInput = s.toLowerCase();
         ArrayList<MusicFiles> myFiles = new ArrayList<>();
         for (MusicFiles song : musicFiles) {
-            if (song.getConvertedTitle().toLowerCase().contains(userInput)) {
+            if (getConvertedTitle(song.getTitle()).toLowerCase().contains(userInput)) {
                 myFiles.add(song);
             }
         }
@@ -343,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 intent = new Intent(getApplicationContext(), CreateNewAlbum.class);
                 startActivity(intent);
                 break;
-            case R.id.addOrExit:
+            /*case R.id.addOrExit:
                 addToAlbumScreen = false;
 
                 synchronized (this) {
@@ -359,12 +390,25 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
 
+                break;*/
+            case R.id.music_online:
+                Intent intent1 = new Intent(getApplicationContext(), Firestore.class);
+                startActivity(intent1);
+
+                break;
+            case R.id.logout:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), Login.class));
+                finish();
+                break;
+            case R.id.userInfor:
+                startActivity(new Intent(getApplicationContext(), UserInfor.class));
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean addToAlbum(final String albumName) {
+    /*private boolean addToAlbum(final String albumName) {
         Log.d("isCheckedList", "length: " + isCheckedList.length);
 
         for (int i = 0; i < isCheckedList.length; i++) {
@@ -383,6 +427,27 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
         return true;
 
+    }*/
+
+    private ArrayList<ArrayList<MusicFiles>> categorizeByAlbum(final ArrayList<MusicFiles> musicFiles) {
+        ArrayList<ArrayList<MusicFiles>> albumFiles = new ArrayList<>();
+        for (int i = 0; i < musicFiles.size(); i++) {
+            boolean checkAddMusic = false;
+            for (int j = 0; j < albumFiles.size(); j++) {
+                if (albumFiles.get(j).get(1).getAlbum().equals(musicFiles.get(i).getAlbum())) {
+                    albumFiles.get(j).add(musicFiles.get(i));
+                    checkAddMusic = true;
+                    break;
+                }
+            }
+            if (!checkAddMusic) {
+                ArrayList<MusicFiles> newAlbum = new ArrayList<>();
+                newAlbum.add(new MusicFiles(null, null, null, musicFiles.get(i).getAlbum(), null));
+                newAlbum.add(musicFiles.get(i));
+                albumFiles.add(newAlbum);
+            }
+        }
+        return albumFiles;
     }
 
     public static class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -419,24 +484,22 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         }
     }
 
-    private ArrayList<ArrayList<MusicFiles>> categorizeByAlbum(final ArrayList<MusicFiles> musicFiles) {
-        ArrayList<ArrayList<MusicFiles>> albumFiles = new ArrayList<>();
-        for (int i = 0; i < musicFiles.size(); i++) {
-            boolean checkAddMusic = false;
-            for (int j = 0; j < albumFiles.size(); j++) {
-                if (albumFiles.get(j).get(1).getAlbum().equals(musicFiles.get(i).getAlbum())) {
-                    albumFiles.get(j).add(musicFiles.get(i));
-                    checkAddMusic = true;
-                    break;
-                }
-            }
-            if (!checkAddMusic) {
-                ArrayList<MusicFiles> newAlbum = new ArrayList<>();
-                newAlbum.add(new MusicFiles(null, null, null, musicFiles.get(i).getAlbum(), null));
-                newAlbum.add(musicFiles.get(i));
-                albumFiles.add(newAlbum);
-            }
-        }
-        return albumFiles;
+    public String getConvertedTitle(String str) {
+        str = str.replaceAll("à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ", "a");
+        str = str.replaceAll("è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ", "e");
+        str = str.replaceAll("ì|í|ị|ỉ|ĩ", "i");
+        str = str.replaceAll("ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ", "o");
+        str = str.replaceAll("ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ", "u");
+        str = str.replaceAll("ỳ|ý|ỵ|ỷ|ỹ", "y");
+        str = str.replaceAll("đ", "d");
+
+        str = str.replaceAll("À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ", "A");
+        str = str.replaceAll("È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ", "E");
+        str = str.replaceAll("Ì|Í|Ị|Ỉ|Ĩ", "I");
+        str = str.replaceAll("Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ", "O");
+        str = str.replaceAll("Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ", "U");
+        str = str.replaceAll("Ỳ|Ý|Ỵ|Ỷ|Ỹ", "Y");
+        str = str.replaceAll("Đ", "D");
+        return str;
     }
 }

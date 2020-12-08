@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.musicplayerapp.Entity.MusicFiles;
 
 import java.util.ArrayList;
 
@@ -25,10 +26,9 @@ import static com.example.musicplayerapp.MainActivity.addToAlbumScreen;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder> {
 
+    static boolean[] isCheckedList;
     private Context mContext;
     private ArrayList<MusicFiles> mFiles;
-
-    static boolean[] isCheckedList;
 
     MusicAdapter(Context mContext, ArrayList<MusicFiles> mFiles) {
         this.mContext = mContext;

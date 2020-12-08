@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1023520038162",
+    "firebase_url": "https://pepe-music-e1b51.firebaseio.com",
+    "project_id": "pepe-music-e1b51",
+    "storage_bucket": "pepe-music-e1b51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1023520038162:android:56e9ed66bd8fa8331fe7cb",
+        "android_client_info": {
+          "package_name": "com.example.musicplayerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1023520038162-8cgpkpmvqvcdt0sqchmsc8nvq26al9me.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.musicplayerapp",
+            "certificate_hash": "59573a57a18f9954790a08737425c6c25f0ed7b0"
+          }
+        },
+        {
+          "client_id": "1023520038162-kr9glhr3h9pdrakm2oplc97o3lr7cml2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1HU4t8c4eSFsQBY85q-TFfXyk83sViaU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1023520038162-kr9glhr3h9pdrakm2oplc97o3lr7cml2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

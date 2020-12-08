@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_top_btn"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginBottom="3dp"
+            android:src="@drawable/ic_baseline_arrow_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:text="Tài khoản cá nhân"
+            android:textColor="#000000"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/back_btn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <RelativeLayout
+        android:id="@+id/user_infor"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_below="@+id/layout_top_btn"
+        android:background="@drawable/gradient_horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/user_img"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="20dp"
+            app:cardCornerRadius="44dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/cover_art"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/pepe_the_frog" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:textSize="20sp"
+            android:layout_toEndOf="@id/user_img"
+            android:text="Con cac"
+            android:textColor="#ffffff" />
+
+        <TextView
+            android:id="@+id/music_file_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/user_name"
+            android:layout_marginStart="10dp"
+            android:text="daubuoi@gmail.com"
+            android:layout_toEndOf="@id/user_img"
+            android:textColor="#ffffff" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/favorite"
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_infor">
+
+        <ImageView
+            android:id="@+id/favorite_song"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginBottom="3dp"
+            android:src="@drawable/ic_baseline_favorite_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_centerVertical="true"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toEndOf="@id/favorite_song"
+            android:text="Bài hát yêu thích"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/upload"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/favorite">
+
+        <ImageView
+            android:id="@+id/upload_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginBottom="3dp"
+            android:src="@drawable/ic_baseline_cloud_upload"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_centerVertical="true"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toEndOf="@id/upload_img"
+            android:text="Các bài hát đã tải lên"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/upload_now"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/upload">
+
+        <ImageView
+            android:id="@+id/upload_now_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginBottom="3dp"
+            android:src="@drawable/ic_baseline_arrow_upward_"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_centerVertical="true"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toEndOf="@id/upload_now_img"
+            android:text="Tải bài hát lên"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right" />
+
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_below="@+id/upload_now"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"/>
+
+    <RelativeLayout
+        android:id="@+id/logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line">
+
+        <ImageView
+            android:id="@+id/logout_img"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="3dp"
+            android:layout_marginBottom="3dp"
+            android:src="@drawable/ic_baseline_directions_run"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_centerVertical="true"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="0dp"
+            android:layout_toEndOf="@id/logout_img"
+            android:text="Đăng xuất"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

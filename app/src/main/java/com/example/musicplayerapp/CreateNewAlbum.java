@@ -24,7 +24,7 @@ public class CreateNewAlbum extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setAction("Update album");
+                intent.setAction("UpdateAlbum");
                 intent.putExtra("createNewAlbum", editTextAlbumName.getText().toString());
                 startActivity(intent);
             }

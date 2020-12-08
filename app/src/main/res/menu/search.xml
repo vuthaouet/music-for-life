@@ -40,4 +40,19 @@
         android:title="Add to album / Exit"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/music_online"
+        android:title="Online"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/userInfor"
+        android:title="Infor"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/logout"
+        android:title="Log out"
+        app:showAsAction="never" />
+
 </menu>

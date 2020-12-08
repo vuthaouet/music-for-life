@@ -14,15 +14,15 @@
         android:id="@+id/logo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/newpepe"
+        android:alpha="0.8"
         android:scaleType="fitXY"
-        android:alpha="0.8"/>
+        android:src="@drawable/newpepe" />
 
     <ImageView
         android:id="@+id/logoText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/text"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:src="@drawable/text" />
 
 </RelativeLayout>
