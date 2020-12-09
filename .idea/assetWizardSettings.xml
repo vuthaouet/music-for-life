@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/D:/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/directions_run/baseline_directions_run_24.xml" />
+                                      <entry key="url" value="jar:file:/D:/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material/icons/materialicons/bar_chart/baseline_bar_chart_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_directions_run" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="ic_baseline_bar_chart" />
                             <entry key="sourceFile" value="C:\Users\ADMIN\Desktop\music-for-life" />
                           </map>
                         </option>
