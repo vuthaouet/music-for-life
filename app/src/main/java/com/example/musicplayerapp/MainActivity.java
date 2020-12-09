@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -165,8 +166,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        viewPagerAdapter.addFragments(new SongsFragment(), "Bài hát");
-        viewPagerAdapter.addFragments(new AlbumFragment(), "Albums");
+        viewPagerAdapter.addFragments(new OnlineFragment(), "Online");
+        viewPagerAdapter.addFragments(new OfflineFragment(), "Offline");
         viewPagerAdapter.addFragments(new ProfileFragment(), "Cá nhân");
 
         viewPager.setAdapter(viewPagerAdapter);

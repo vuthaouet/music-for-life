@@ -7,23 +7,26 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import static com.example.musicplayerapp.MainActivity.albumFiles;
 import static com.example.musicplayerapp.MainActivity.musicFiles;
 
-public class OfflineFragment extends Fragment {
+public class OnlineFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    RecyclerView recyclerView;
+    RecyclerView recyclerViewAlbum;
+    RecyclerView recyclerViewSong;
+    static MusicAdapter musicAdapter;
     AlbumAdapter albumAdapter;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    public OfflineFragment() {
+    public OnlineFragment() {
         // Required empty public constructor
     }
 
@@ -36,8 +39,8 @@ public class OfflineFragment extends Fragment {
      * @return A new instance of fragment AlbumFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static OfflineFragment newInstance(String param1, String param2) {
-        OfflineFragment fragment = new OfflineFragment();
+    public static OnlineFragment newInstance(String param1, String param2) {
+        OnlineFragment fragment = new OnlineFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -58,13 +61,21 @@ public class OfflineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_offline, container, false);
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
+        View view = inflater.inflate(R.layout.fragment_online, container, false);
+        recyclerViewAlbum = view.findViewById(R.id.recyclerViewAlbum);
+        recyclerViewAlbum.setHasFixedSize(true);
         if (!(musicFiles.size() < 1)) {
             albumAdapter = new AlbumAdapter(getContext(), albumFiles);
-            recyclerView.setAdapter(albumAdapter);
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+            recyclerViewAlbum.setAdapter(albumAdapter);
+            recyclerViewAlbum.setLayoutManager( new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        }
+        recyclerViewSong = view.findViewById(R.id.recyclerViewSong);
+        recyclerViewSong.setHasFixedSize(true);
+
+        if (!(musicFiles.size() < 1)) {
+            musicAdapter = new MusicAdapter(getContext(), musicFiles);
+            recyclerViewSong.setAdapter(musicAdapter);
+            recyclerViewSong.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         }
         return view;
     }
