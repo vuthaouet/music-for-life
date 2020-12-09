@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foregroundTint="@color/colorPrimary">
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="318dp"
+        android:layout_height="550dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/background_border_form"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="80dp"
+            android:color="#ffffff"
+            android:text="Tên bài hát:"
+            android:textColor="#000"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextAlbumName"
+            android:layout_width="288dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="120dp"
+            android:background="@drawable/btn_white"
+            android:ems="10"
+            android:hint="Nhập tên của bài hát"
+            android:padding="15dp" />
+
+        <Button
+            android:id="@+id/buttonAlbumName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/editTextAlbumName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200dp"
+            android:background="@drawable/random_btn_purple"
+            android:padding="10dp"
+            android:radius="12dp"
+            android:text="Tải bài hát mới"
+            android:textColor="#ffffff" />
+
+        <ProgressBar
+            android:id="@+id/progressBarUpload"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminateTint="@color/colorPrimary"
+            android:layout_marginTop="280dp"
+            android:layout_marginLeft="130dp" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
