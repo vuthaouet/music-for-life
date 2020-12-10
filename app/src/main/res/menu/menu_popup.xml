@@ -5,9 +5,4 @@
         android:id="@+id/deleteAlbum"
         android:title="Delete"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/addToAlbum"
-        android:title="Add to album"
-        app:showAsAction="never" />
 </menu>

@@ -325,6 +325,17 @@ public class PlayerActivityOnline extends PlayerMusic implements MediaPlayer.OnC
                     Config.currentListSong.add(lookForSongsByTitle.get(Config.songIndex));
                     Config.songIndex = 0;
                     break;
+                case "favorSongListener":
+                    Config.currentListSong = new ArrayList<>();
+                    Config.currentListSong.addAll(Config.favoriteList);
+                    break;
+                case "uploadSongListener":
+                    Config.currentListSong = new ArrayList<>();
+                    Config.currentListSong.addAll(Config.uploadList);
+                    break;
+                case "albumSongListener":
+                    Config.currentListSong = new ArrayList<>();
+                    Config.currentListSong.addAll(Config.getFromAlbumOnline);
                 default:
                     break;
             }

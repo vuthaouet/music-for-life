@@ -45,12 +45,12 @@ public class VerticalRecycleViewAdapter extends RecyclerView.Adapter<VerticalRec
         holder.recyclerView.setHasFixedSize(true);
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL,false));
         holder.recyclerView.setAdapter(horizontalRecycleViewAdapter);
-        holder.btnMore.setOnClickListener(new View.OnClickListener() {
+        /*holder.btnMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,verticalModel.getTitle(),Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
     }
 
@@ -63,13 +63,13 @@ public class VerticalRecycleViewAdapter extends RecyclerView.Adapter<VerticalRec
 
         RecyclerView recyclerView;
         TextView textView;
-        Button btnMore;
+        //Button btnMore;
 
         public VerticalRVHolder(@NonNull View itemView) {
             super(itemView);
             recyclerView = itemView.findViewById(R.id.recyclerView1);
             textView = itemView.findViewById(R.id.title1);
-            btnMore = itemView.findViewById(R.id.btn);
+            //btnMore = itemView.findViewById(R.id.btn);
         }
     }
 }

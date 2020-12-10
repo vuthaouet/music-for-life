@@ -18,4 +18,13 @@ public class Config {
     public static int songIndex;
 
     public static String currentIdSong;
+
+    public static boolean addToAlbumScreen = false;
+
+    public static List<MusicFiles> favoriteList;
+    public static List<MusicFiles> uploadList;
+
+    public static List<String> nameOfAlbums;
+
+    public static List<MusicFiles> getFromAlbumOnline = new ArrayList<>();
 }

@@ -1,0 +1,517 @@
+Index: app/src/main/java/com/example/musicplayerapp/Authenticate/UserInfor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.musicplayerapp.Authenticate;\r\n\r\nimport android.content.Context;\r\nimport android.content.Intent;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.util.Log;\r\nimport android.view.MotionEvent;\r\nimport android.view.View;\r\nimport android.widget.ImageView;\r\nimport android.widget.ScrollView;\r\nimport android.widget.SearchView;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.annotation.Nullable;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\n\r\nimport com.bumptech.glide.Glide;\r\nimport com.example.musicplayerapp.Adapter.MusicAdapter;\r\nimport com.example.musicplayerapp.Config;\r\nimport com.example.musicplayerapp.Database.UploadFile;\r\nimport com.example.musicplayerapp.Entity.MusicFiles;\r\nimport com.example.musicplayerapp.Format.Format;\r\nimport com.example.musicplayerapp.R;\r\nimport com.example.musicplayerapp.Random.RandomString;\r\nimport com.google.android.gms.tasks.OnCompleteListener;\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.firebase.auth.FirebaseAuth;\r\nimport com.google.firebase.auth.FirebaseUser;\r\nimport com.google.firebase.auth.UserInfo;\r\nimport com.google.firebase.firestore.DocumentReference;\r\nimport com.google.firebase.firestore.DocumentSnapshot;\r\nimport com.google.firebase.firestore.EventListener;\r\nimport com.google.firebase.firestore.FieldValue;\r\nimport com.google.firebase.firestore.FirebaseFirestore;\r\nimport com.google.firebase.firestore.FirebaseFirestoreException;\r\nimport com.google.firebase.firestore.Query;\r\nimport com.google.firebase.firestore.QueryDocumentSnapshot;\r\nimport com.google.firebase.firestore.QuerySnapshot;\r\nimport com.google.firebase.storage.FirebaseStorage;\r\nimport com.google.firebase.storage.StorageReference;\r\nimport com.google.firebase.storage.UploadTask;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.HashMap;\r\nimport java.util.List;\r\nimport java.util.Map;\r\n\r\npublic class UserInfor extends AppCompatActivity {\r\n    private TextView iEmail, iFullName, logOutText, favoriteText;\r\n    private ImageView avatar, showFavoriteList;\r\n    private String userId;\r\n    //private SearchView searchView;\r\n    private RecyclerView recyclerView_favorite;\r\n    private MusicAdapter musicAdapter_favorite;\r\n\r\n    private ArrayList<MusicAdapter> favoriteList = new ArrayList<>();\r\n\r\n    FirebaseAuth firebaseAuth;\r\n    FirebaseFirestore firebaseFirestore;\r\n    FirebaseStorage firebaseStorage;\r\n    FirebaseUser firebaseUser;\r\n\r\n    @Override\r\n    protected void onCreate(final Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.user_setting);\r\n\r\n        initView();\r\n\r\n        firebaseAuth = FirebaseAuth.getInstance();\r\n        firebaseFirestore = FirebaseFirestore.getInstance();\r\n        firebaseStorage = FirebaseStorage.getInstance();\r\n\r\n        firebaseUser = firebaseAuth.getCurrentUser();\r\n\r\n        userId = firebaseUser.getUid();\r\n\r\n        setImage(firebaseUser.getPhotoUrl(), this, avatar);\r\n\r\n        DocumentReference documentReference = firebaseFirestore.collection(\"Users\").document(userId);\r\n        /*documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {\r\n                iEmail.setText(value.getString(\"email\"));\r\n                iFullName.setText(value.getString(\"fullName\"));\r\n            }\r\n        });*/\r\n        iFullName.setText(firebaseUser.getDisplayName());\r\n        iEmail.setText(firebaseUser.getEmail());\r\n\r\n        /*documentReference.update(\"likes\", FieldValue.arrayRemove(\"lJqJDe5NbBScyTKdB3e1\"));\r\n        documentReference.update(\"likes\", FieldValue.arrayUnion(\"lJqJDe5NbBScyTKdB3e1\"));*/\r\n\r\n        documentReference.update(\"test\", FieldValue.delete()).addOnCompleteListener(new OnCompleteListener<Void>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<Void> task) {\r\n                Log.d(\"TAG\", \"Done\");\r\n            }\r\n        });\r\n\r\n        documentReference.update(\"new album\", \"\");\r\n\r\n        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onComplete(@NonNull Task<DocumentSnapshot> task) {\r\n                if (task.isSuccessful()) {\r\n                    List<String> list = new ArrayList<>();\r\n                    Map<String, Object> map = task.getResult().getData();\r\n                    for (Map.Entry<String, Object> entry : map.entrySet()) {\r\n                        list.add(entry.getKey());\r\n                        Log.d(\"TAG\", entry.getKey());\r\n                    }\r\n                }\r\n            }\r\n        });\r\n\r\n        firebaseFirestore.collection(\"UserUpload\")\r\n                .get()\r\n                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {\r\n                    @Override\r\n                    public void onComplete(@NonNull Task<QuerySnapshot> task) {\r\n                        if (task.isSuccessful()) {\r\n                            for (QueryDocumentSnapshot document : task.getResult()) {\r\n                                Log.d(\"albumName\", \"onComplete: \" + document.getId());\r\n                            }\r\n                        }\r\n                    }\r\n                });\r\n\r\n        avatar.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                startActivity(new Intent(getApplicationContext(), UploadFile.class));\r\n            }\r\n        });\r\n\r\n        logOutText.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                logOut();\r\n            }\r\n        });\r\n\r\n        favoriteText.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n            }\r\n        });\r\n\r\n        getFavoriteList(documentReference);\r\n    }\r\n\r\n    private void initView() {\r\n        iEmail = findViewById(R.id.music_file_artist);\r\n        iFullName = findViewById(R.id.user_name);\r\n\r\n        avatar = findViewById(R.id.cover_art);\r\n\r\n        logOutText = findViewById(R.id.log_out_text);\r\n        favoriteText = findViewById(R.id.favorite_song_text);\r\n        //searchView = findViewById(R.id.search_song);\r\n\r\n        recyclerView_favorite = findViewById(R.id.recyclerView_favorite);\r\n\r\n        //parentScrollView = (ScrollView) findViewById(R.id.parent_scrollView);\r\n        //childScrollView = (ScrollView) findViewById(R.id.favorite_list);\r\n        showFavoriteList = findViewById(R.id.show_favorite_list);\r\n    }\r\n\r\n    private void setImage(Uri url, Context context, ImageView imageView) {\r\n        if (url != null) {\r\n            Glide.with(context).asBitmap()\r\n                    .load(url.toString())\r\n                    .into(imageView);\r\n        } else {\r\n            Glide.with(context)\r\n                    .load(R.drawable.pepe_the_frog)\r\n                    .into(imageView);\r\n        }\r\n    }\r\n\r\n    private void logOut() {\r\n        FirebaseAuth.getInstance().signOut();\r\n        startActivity(new Intent(getApplicationContext(), Login.class));\r\n        finish();\r\n    }\r\n\r\n    private void getFavoriteList(DocumentReference documentReference) {\r\n        favoriteList.clear();\r\n\r\n        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {\r\n            @Override\r\n            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {\r\n                List<String> group = (List<String>) value.get(\"likes\");\r\n\r\n                //Log.d(\"firebase\", \"onEvent: \" + group.toString());\r\n                for (String idMusic : group) {\r\n                    Task<DocumentSnapshot> musicFilesTask = firebaseFirestore.collection(\"Music\").document(idMusic).get();\r\n                    musicFilesTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {\r\n                        @Override\r\n                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {\r\n                            if (task.isSuccessful()) {\r\n                                MusicFiles song = task.getResult().toObject(MusicFiles.class);\r\n                                if (song != null) {\r\n                                    Log.d(\"TAG\", \"onComplete: \" + song.getTitle());\r\n                                }\r\n                            }\r\n                        }\r\n                    });\r\n                }\r\n            }\r\n        });\r\n\r\n        musicAdapter_favorite = new MusicAdapter(getApplicationContext(), (ArrayList<MusicFiles>) Config.currentListSong);\r\n        recyclerView_favorite.setAdapter(musicAdapter_favorite);\r\n        recyclerView_favorite.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/musicplayerapp/Authenticate/UserInfor.java	(revision d1df9740116892850d29a12b0bf2c5d0049c0720)
++++ app/src/main/java/com/example/musicplayerapp/Authenticate/UserInfor.java	(date 1607571577868)
+@@ -19,6 +19,7 @@
+ import androidx.recyclerview.widget.RecyclerView;
+ 
+ import com.bumptech.glide.Glide;
++import com.example.musicplayerapp.Adapter.ListAdapter;
+ import com.example.musicplayerapp.Adapter.MusicAdapter;
+ import com.example.musicplayerapp.Config;
+ import com.example.musicplayerapp.Database.UploadFile;
+@@ -52,14 +53,20 @@
+ import java.util.Map;
+ 
+ public class UserInfor extends AppCompatActivity {
+-    private TextView iEmail, iFullName, logOutText, favoriteText;
+-    private ImageView avatar, showFavoriteList;
++    private TextView iEmail, iFullName, logOutText;
++    private ImageView avatar, showFavoriteList, showUploadList;
+     private String userId;
+-    //private SearchView searchView;
++
+     private RecyclerView recyclerView_favorite;
+     private MusicAdapter musicAdapter_favorite;
++    private ScrollView favoriteScrollView;
+ 
+-    private ArrayList<MusicAdapter> favoriteList = new ArrayList<>();
++    private RecyclerView recyclerView_upload;
++    private MusicAdapter musicAdapter_upload;
++    private ScrollView uploadScrollView;
++
++    public static ArrayList<MusicFiles> favoriteList = new ArrayList<>();
++    public static ArrayList<MusicFiles> uploadList = new ArrayList<>();
+ 
+     FirebaseAuth firebaseAuth;
+     FirebaseFirestore firebaseFirestore;
+@@ -83,7 +90,19 @@
+ 
+         setImage(firebaseUser.getPhotoUrl(), this, avatar);
+ 
+-        DocumentReference documentReference = firebaseFirestore.collection("Users").document(userId);
++        /*DocumentReference documentReference = firebaseFirestore.collection("Users").document(userId);
++        firebaseFirestore.collection("UserUpload")
++                .get()
++                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
++                    @Override
++                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
++                        if(task.isSuccessful()){
++                            List<String>
++                        }
++                    }
++                });*/
++
++
+         /*documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+             @Override
+             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+@@ -97,7 +116,7 @@
+         /*documentReference.update("likes", FieldValue.arrayRemove("lJqJDe5NbBScyTKdB3e1"));
+         documentReference.update("likes", FieldValue.arrayUnion("lJqJDe5NbBScyTKdB3e1"));*/
+ 
+-        documentReference.update("test", FieldValue.delete()).addOnCompleteListener(new OnCompleteListener<Void>() {
++        /*documentReference.update("test", FieldValue.delete()).addOnCompleteListener(new OnCompleteListener<Void>() {
+             @Override
+             public void onComplete(@NonNull Task<Void> task) {
+                 Log.d("TAG", "Done");
+@@ -147,13 +166,35 @@
+             }
+         });
+ 
+-        favoriteText.setOnClickListener(new View.OnClickListener() {
++        showFavoriteList.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                if (favoriteScrollView.getVisibility() == View.GONE) {
++                    favoriteScrollView.setVisibility(View.VISIBLE);
++                    showFavoriteList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
++                } else {
++                    favoriteScrollView.setVisibility(View.GONE);
++                    showFavoriteList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right);
++                }
++            }
++        });
++
++        showUploadList.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
++                if (uploadScrollView.getVisibility() == View.GONE) {
++                    uploadScrollView.setVisibility(View.VISIBLE);
++                    showUploadList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
++                } else {
++                    uploadScrollView.setVisibility(View.GONE);
++                    showUploadList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right);
++                }
+             }
+-        });
++        });*/
+ 
+-        getFavoriteList(documentReference);
++
++        //getFavoriteList(documentReference);
++        //getUploadList();
+     }
+ 
+     private void initView() {
+@@ -163,14 +204,20 @@
+         avatar = findViewById(R.id.cover_art);
+ 
+         logOutText = findViewById(R.id.log_out_text);
+-        favoriteText = findViewById(R.id.favorite_song_text);
+         //searchView = findViewById(R.id.search_song);
+ 
+         recyclerView_favorite = findViewById(R.id.recyclerView_favorite);
++        recyclerView_upload = findViewById(R.id.recyclerView_upload);
+ 
+         //parentScrollView = (ScrollView) findViewById(R.id.parent_scrollView);
+         //childScrollView = (ScrollView) findViewById(R.id.favorite_list);
+         showFavoriteList = findViewById(R.id.show_favorite_list);
++        showUploadList = findViewById(R.id.show_upload_list);
++
++        favoriteScrollView = findViewById(R.id.favorite_list);
++        uploadScrollView = findViewById(R.id.upload_list);
++
++        Config.playOnline = true;
+     }
+ 
+     private void setImage(Uri url, Context context, ImageView imageView) {
+@@ -191,7 +238,7 @@
+         finish();
+     }
+ 
+-    private void getFavoriteList(DocumentReference documentReference) {
++    /*private void getFavoriteList(DocumentReference documentReference) {
+         favoriteList.clear();
+ 
+         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+@@ -208,7 +255,8 @@
+                             if (task.isSuccessful()) {
+                                 MusicFiles song = task.getResult().toObject(MusicFiles.class);
+                                 if (song != null) {
+-                                    Log.d("TAG", "onComplete: " + song.getTitle());
++                                    Log.d("favorite", "onComplete: " + song.getTitle());
++                                    favoriteList.add(song);
+                                 }
+                             }
+                         }
+@@ -217,8 +265,42 @@
+             }
+         });
+ 
+-        musicAdapter_favorite = new MusicAdapter(getApplicationContext(), (ArrayList<MusicFiles>) Config.currentListSong);
++        musicAdapter_favorite = new MusicAdapter(getApplicationContext(), favoriteList, "FAVOR");
+         recyclerView_favorite.setAdapter(musicAdapter_favorite);
+         recyclerView_favorite.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
+     }
++
++    private void getUploadList() {
++        uploadList.clear();
++        Log.d("email", "getUploadList: " + firebaseUser.getEmail());
++
++        firebaseFirestore.collection("UserUpload")
++                .document(firebaseUser.getEmail())
++                .addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
++                    @Override
++                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
++                        List<String> group = (List<String>) value.get("songs");
++
++                        for (String idMusic : group) {
++                            Task<DocumentSnapshot> musicFilesTask = firebaseFirestore.collection("Music").document(idMusic).get();
++                            musicFilesTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
++                                @Override
++                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
++                                    if (task.isSuccessful()) {
++                                        MusicFiles song = task.getResult().toObject(MusicFiles.class);
++                                        if (song != null) {
++                                            Log.d("upload", "onComplete: " + song.getTitle());
++                                            uploadList.add(song);
++                                        }
++                                    }
++                                }
++                            });
++                        }
++                    }
++                });
++
++        musicAdapter_upload = new MusicAdapter(getApplicationContext(), uploadList, "UPLOAD");
++        recyclerView_upload.setAdapter(musicAdapter_upload);
++        recyclerView_upload.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
++    }*/
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/musicplayerapp/Fragment/ProfileFragment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.musicplayerapp.Fragment;\r\n\r\nimport androidx.fragment.app.Fragment;\r\n\r\npublic class ProfileFragment extends Fragment {\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/musicplayerapp/Fragment/ProfileFragment.java	(revision d1df9740116892850d29a12b0bf2c5d0049c0720)
++++ app/src/main/java/com/example/musicplayerapp/Fragment/ProfileFragment.java	(date 1607572479038)
+@@ -1,6 +1,308 @@
+ package com.example.musicplayerapp.Fragment;
+ 
++import android.app.Activity;
++import android.content.Context;
++import android.content.Intent;
++import android.net.Uri;
++import android.os.Bundle;
++
++import androidx.annotation.NonNull;
++import androidx.annotation.Nullable;
+ import androidx.fragment.app.Fragment;
++import androidx.recyclerview.widget.LinearLayoutManager;
++import androidx.recyclerview.widget.RecyclerView;
++
++import android.util.Log;
++import android.view.LayoutInflater;
++import android.view.View;
++import android.view.ViewGroup;
++import android.widget.ImageView;
++import android.widget.ScrollView;
++import android.widget.TextView;
++
++import com.bumptech.glide.Glide;
++import com.example.musicplayerapp.Adapter.MusicAdapter;
++import com.example.musicplayerapp.Authenticate.Login;
++import com.example.musicplayerapp.Config;
++import com.example.musicplayerapp.Database.UploadFile;
++import com.example.musicplayerapp.Entity.MusicFiles;
++import com.example.musicplayerapp.MainActivity;
++import com.example.musicplayerapp.R;
++import com.google.android.gms.tasks.OnCompleteListener;
++import com.google.android.gms.tasks.Task;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.auth.FirebaseUser;
++import com.google.firebase.firestore.DocumentReference;
++import com.google.firebase.firestore.DocumentSnapshot;
++import com.google.firebase.firestore.EventListener;
++import com.google.firebase.firestore.FieldValue;
++import com.google.firebase.firestore.FirebaseFirestore;
++import com.google.firebase.firestore.FirebaseFirestoreException;
++import com.google.firebase.firestore.QueryDocumentSnapshot;
++import com.google.firebase.firestore.QuerySnapshot;
++import com.google.firebase.storage.FirebaseStorage;
++
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Map;
+ 
+ public class ProfileFragment extends Fragment {
+-}
++    private TextView iEmail, iFullName, logOutText;
++    private ImageView avatar, showFavoriteList, showUploadList;
++    private String userId;
++
++    private RecyclerView recyclerView_favorite;
++    private MusicAdapter musicAdapter_favorite;
++    private ScrollView favoriteScrollView;
++
++    private RecyclerView recyclerView_upload;
++    private MusicAdapter musicAdapter_upload;
++    private ScrollView uploadScrollView;
++
++    //public static ArrayList<MusicFiles> favoriteList = new ArrayList<>();
++    //public static ArrayList<MusicFiles> uploadList = new ArrayList<>();
++
++    FirebaseAuth firebaseAuth;
++    FirebaseFirestore firebaseFirestore;
++    FirebaseStorage firebaseStorage;
++    FirebaseUser firebaseUser;
++
++    Activity activity;
++
++    public ProfileFragment(Activity activity) {
++        // Required empty public constructor
++        this.activity = activity;
++    }
++
++    @Override
++    public void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++
++        firebaseAuth = FirebaseAuth.getInstance();
++        firebaseFirestore = FirebaseFirestore.getInstance();
++        firebaseStorage = FirebaseStorage.getInstance();
++
++        firebaseUser = firebaseAuth.getCurrentUser();
++
++        userId = firebaseUser.getUid();
++
++        firebaseFirestore.collection("UserUpload")
++                .get()
++                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
++                    @Override
++                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
++                        if (task.isSuccessful()) {
++                            for (QueryDocumentSnapshot document : task.getResult()) {
++                                Log.d("albumName", "onComplete: " + document.getId());
++                            }
++                        }
++                    }
++                });
++    }
++
++    @Override
++    public View onCreateView(LayoutInflater inflater, ViewGroup container,
++                             Bundle savedInstanceState) {
++        // Inflate the layout for this fragment
++        View view = inflater.inflate(R.layout.user_setting, container, false);
++        initView(view);
++        //setImage(firebaseUser.getPhotoUrl(), getContext(), avatar);
++
++
++        /*documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
++            @Override
++            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
++                iEmail.setText(value.getString("email"));
++                iFullName.setText(value.getString("fullName"));
++            }
++        });*/
++        iFullName.setText(firebaseUser.getDisplayName());
++        iEmail.setText(firebaseUser.getEmail());
++
++        /*documentReference.update("likes", FieldValue.arrayRemove("lJqJDe5NbBScyTKdB3e1"));
++        documentReference.update("likes", FieldValue.arrayUnion("lJqJDe5NbBScyTKdB3e1"));*/
++        avatar.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View view) {
++                startActivity(new Intent(getContext(), UploadFile.class));
++            }
++        });
++
++        logOutText.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                logOut();
++            }
++        });
++
++        showFavoriteList.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                if (favoriteScrollView.getVisibility() == View.GONE) {
++                    favoriteScrollView.setVisibility(View.VISIBLE);
++                    showFavoriteList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
++                } else {
++                    favoriteScrollView.setVisibility(View.GONE);
++                    showFavoriteList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right);
++                }
++            }
++        });
++
++        showUploadList.setOnClickListener(new View.OnClickListener() {
++            @Override
++            public void onClick(View v) {
++                if (uploadScrollView.getVisibility() == View.GONE) {
++                    uploadScrollView.setVisibility(View.VISIBLE);
++                    showUploadList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
++                } else {
++                    uploadScrollView.setVisibility(View.GONE);
++                    showUploadList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right);
++                }
++            }
++        });
++
++        /*DocumentReference documentReference = firebaseFirestore.collection("Users").document(userId);
++
++        documentReference.update("test", FieldValue.delete()).addOnCompleteListener(new OnCompleteListener<Void>() {
++            @Override
++            public void onComplete(@NonNull Task<Void> task) {
++                Log.d("TAG", "Done");
++            }
++        });
++
++        documentReference.update("new album", "");
++
++        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
++            @Override
++            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
++                if (task.isSuccessful()) {
++                    List<String> list = new ArrayList<>();
++                    Map<String, Object> map = task.getResult().getData();
++                    for (Map.Entry<String, Object> entry : map.entrySet()) {
++                        list.add(entry.getKey());
++                        Log.d("TAG", entry.getKey());
++                    }
++                }
++            }
++        });*/
++
++        getFavoriteList();
++        getUploadList();
++
++        return view;
++    }
++
++    private void initView(View view) {
++        iEmail = view.findViewById(R.id.music_file_artist);
++        iFullName = view.findViewById(R.id.user_name);
++
++        avatar = view.findViewById(R.id.cover_art);
++
++        logOutText = view.findViewById(R.id.log_out_text);
++        //searchView = findViewById(R.id.search_song);
++
++        recyclerView_favorite = view.findViewById(R.id.recyclerView_favorite);
++        recyclerView_upload = view.findViewById(R.id.recyclerView_upload);
++
++        //parentScrollView = (ScrollView) findViewById(R.id.parent_scrollView);
++        //childScrollView = (ScrollView) findViewById(R.id.favorite_list);
++        showFavoriteList = view.findViewById(R.id.show_favorite_list);
++        showUploadList = view.findViewById(R.id.show_upload_list);
++
++        favoriteScrollView = view.findViewById(R.id.favorite_list);
++        uploadScrollView = view.findViewById(R.id.upload_list);
++
++        Config.favoriteList = new ArrayList<>();
++        Config.uploadList = new ArrayList<>();
++
++        Config.playOnline = true;
++    }
++
++    private void setImage(Uri url, Context context, ImageView imageView) {
++        if (url != null) {
++            Glide.with(context).asBitmap()
++                    .load(url.toString())
++                    .into(imageView);
++        } else {
++            Glide.with(context)
++                    .load(R.drawable.pepe_the_frog)
++                    .into(imageView);
++        }
++    }
++
++    private void logOut() {
++        FirebaseAuth.getInstance().signOut();
++        startActivity(new Intent(getContext(), Login.class));
++        getActivity().finish();
++    }
++
++    private void getFavoriteList() {
++        Config.favoriteList.clear();
++
++        firebaseFirestore.collection("Users")
++                .document(userId)
++                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
++                    @Override
++                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
++                        List<String> group = (List<String>) value.get("likes");
++
++                        //Log.d("firebase", "onEvent: " + group.toString());
++                        for (String idMusic : group) {
++                            Task<DocumentSnapshot> musicFilesTask = firebaseFirestore.collection("Music").document(idMusic).get();
++                            musicFilesTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
++                                @Override
++                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
++                                    if (task.isSuccessful()) {
++                                        MusicFiles song = task.getResult().toObject(MusicFiles.class);
++                                        if (song != null) {
++                                            Log.d("favorite", "onComplete: " + song.getTitle());
++                                            Config.favoriteList.add(song);
++                                        }
++                                        musicAdapter_favorite.updateList((ArrayList<MusicFiles>) Config.favoriteList);
++                                    }
++                                }
++                            });
++                        }
++                    }
++                });
++
++        musicAdapter_favorite = new MusicAdapter(getContext(), (ArrayList<MusicFiles>) Config.favoriteList, "FAVOR");
++        recyclerView_favorite.setAdapter(musicAdapter_favorite);
++        recyclerView_favorite.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
++    }
++
++    private void getUploadList() {
++        Config.uploadList.clear();
++        Log.d("email", "getUploadList: " + firebaseUser.getEmail());
++
++        firebaseFirestore.collection("UserUpload")
++                .document(firebaseUser.getEmail())
++                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
++                    @Override
++                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
++                        List<String> group = (List<String>) value.get("songs");
++
++                        for (String idMusic : group) {
++                            Task<DocumentSnapshot> musicFilesTask = firebaseFirestore.collection("Music").document(idMusic).get();
++                            musicFilesTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
++                                @Override
++                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
++                                    if (task.isSuccessful()) {
++                                        MusicFiles song = task.getResult().toObject(MusicFiles.class);
++                                        if (song != null) {
++                                            Log.d("upload", "onComplete: " + song.getTitle());
++                                            Config.uploadList.add(song);
++                                        }
++                                        musicAdapter_upload.updateList((ArrayList<MusicFiles>) Config.uploadList);
++                                    }
++                                }
++                            });
++                        }
++                    }
++                });
++
++        musicAdapter_upload = new MusicAdapter(getContext(), (ArrayList<MusicFiles>) Config.uploadList, "UPLOAD");
++        recyclerView_upload.setAdapter(musicAdapter_upload);
++        recyclerView_upload.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
++    }
++}
+\ No newline at end of file

@@ -136,7 +136,8 @@
             android:id="@+id/favorite_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/favorite">
+            android:layout_below="@id/favorite"
+            android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
 
@@ -178,6 +179,7 @@
                 android:textSize="20sp" />
 
             <ImageView
+                android:id="@+id/show_upload_list"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentEnd="true"
@@ -190,12 +192,12 @@
         <ScrollView
             android:id="@+id/upload_list"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_below="@id/upload">
+            android:layout_height="wrap_content"
+            android:layout_below="@id/upload"
+            android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
-
-                android:id="@+id/recyclerView2"
+                android:id="@+id/recyclerView_upload"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp" />
@@ -282,6 +284,11 @@
                 android:textSize="20sp" />
 
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_below="@+id/logout" />
 
     </RelativeLayout>
 

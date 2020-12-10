@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.musicplayerapp.Adapter.ListAdapter;
 import com.example.musicplayerapp.Adapter.MusicAdapter;
 import com.example.musicplayerapp.Config;
 import com.example.musicplayerapp.Database.UploadFile;
@@ -52,14 +53,20 @@ import java.util.List;
 import java.util.Map;
 
 public class UserInfor extends AppCompatActivity {
-    private TextView iEmail, iFullName, logOutText, favoriteText;
-    private ImageView avatar, showFavoriteList;
+    private TextView iEmail, iFullName, logOutText;
+    private ImageView avatar, showFavoriteList, showUploadList;
     private String userId;
-    //private SearchView searchView;
+
     private RecyclerView recyclerView_favorite;
     private MusicAdapter musicAdapter_favorite;
+    private ScrollView favoriteScrollView;
 
-    private ArrayList<MusicAdapter> favoriteList = new ArrayList<>();
+    private RecyclerView recyclerView_upload;
+    private MusicAdapter musicAdapter_upload;
+    private ScrollView uploadScrollView;
+
+    public static ArrayList<MusicFiles> favoriteList = new ArrayList<>();
+    public static ArrayList<MusicFiles> uploadList = new ArrayList<>();
 
     FirebaseAuth firebaseAuth;
     FirebaseFirestore firebaseFirestore;
@@ -83,7 +90,19 @@ public class UserInfor extends AppCompatActivity {
 
         setImage(firebaseUser.getPhotoUrl(), this, avatar);
 
-        DocumentReference documentReference = firebaseFirestore.collection("Users").document(userId);
+        /*DocumentReference documentReference = firebaseFirestore.collection("Users").document(userId);
+        firebaseFirestore.collection("UserUpload")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            List<String>
+                        }
+                    }
+                });*/
+
+
         /*documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -97,7 +116,7 @@ public class UserInfor extends AppCompatActivity {
         /*documentReference.update("likes", FieldValue.arrayRemove("lJqJDe5NbBScyTKdB3e1"));
         documentReference.update("likes", FieldValue.arrayUnion("lJqJDe5NbBScyTKdB3e1"));*/
 
-        documentReference.update("test", FieldValue.delete()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        /*documentReference.update("test", FieldValue.delete()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 Log.d("TAG", "Done");
@@ -147,13 +166,35 @@ public class UserInfor extends AppCompatActivity {
             }
         });
 
-        favoriteText.setOnClickListener(new View.OnClickListener() {
+        showFavoriteList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (favoriteScrollView.getVisibility() == View.GONE) {
+                    favoriteScrollView.setVisibility(View.VISIBLE);
+                    showFavoriteList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
+                } else {
+                    favoriteScrollView.setVisibility(View.GONE);
+                    showFavoriteList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right);
+                }
             }
         });
 
-        getFavoriteList(documentReference);
+        showUploadList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (uploadScrollView.getVisibility() == View.GONE) {
+                    uploadScrollView.setVisibility(View.VISIBLE);
+                    showUploadList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
+                } else {
+                    uploadScrollView.setVisibility(View.GONE);
+                    showUploadList.setImageResource(R.drawable.ic_baseline_keyboard_arrow_right);
+                }
+            }
+        });*/
+
+
+        //getFavoriteList(documentReference);
+        //getUploadList();
     }
 
     private void initView() {
@@ -163,14 +204,20 @@ public class UserInfor extends AppCompatActivity {
         avatar = findViewById(R.id.cover_art);
 
         logOutText = findViewById(R.id.log_out_text);
-        favoriteText = findViewById(R.id.favorite_song_text);
         //searchView = findViewById(R.id.search_song);
 
         recyclerView_favorite = findViewById(R.id.recyclerView_favorite);
+        recyclerView_upload = findViewById(R.id.recyclerView_upload);
 
         //parentScrollView = (ScrollView) findViewById(R.id.parent_scrollView);
         //childScrollView = (ScrollView) findViewById(R.id.favorite_list);
         showFavoriteList = findViewById(R.id.show_favorite_list);
+        showUploadList = findViewById(R.id.show_upload_list);
+
+        favoriteScrollView = findViewById(R.id.favorite_list);
+        uploadScrollView = findViewById(R.id.upload_list);
+
+        Config.playOnline = true;
     }
 
     private void setImage(Uri url, Context context, ImageView imageView) {
@@ -191,7 +238,7 @@ public class UserInfor extends AppCompatActivity {
         finish();
     }
 
-    private void getFavoriteList(DocumentReference documentReference) {
+    /*private void getFavoriteList(DocumentReference documentReference) {
         favoriteList.clear();
 
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
@@ -208,7 +255,8 @@ public class UserInfor extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 MusicFiles song = task.getResult().toObject(MusicFiles.class);
                                 if (song != null) {
-                                    Log.d("TAG", "onComplete: " + song.getTitle());
+                                    Log.d("favorite", "onComplete: " + song.getTitle());
+                                    favoriteList.add(song);
                                 }
                             }
                         }
@@ -217,8 +265,42 @@ public class UserInfor extends AppCompatActivity {
             }
         });
 
-        musicAdapter_favorite = new MusicAdapter(getApplicationContext(), (ArrayList<MusicFiles>) Config.currentListSong);
+        musicAdapter_favorite = new MusicAdapter(getApplicationContext(), favoriteList, "FAVOR");
         recyclerView_favorite.setAdapter(musicAdapter_favorite);
         recyclerView_favorite.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
     }
+
+    private void getUploadList() {
+        uploadList.clear();
+        Log.d("email", "getUploadList: " + firebaseUser.getEmail());
+
+        firebaseFirestore.collection("UserUpload")
+                .document(firebaseUser.getEmail())
+                .addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                        List<String> group = (List<String>) value.get("songs");
+
+                        for (String idMusic : group) {
+                            Task<DocumentSnapshot> musicFilesTask = firebaseFirestore.collection("Music").document(idMusic).get();
+                            musicFilesTask.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        MusicFiles song = task.getResult().toObject(MusicFiles.class);
+                                        if (song != null) {
+                                            Log.d("upload", "onComplete: " + song.getTitle());
+                                            uploadList.add(song);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
+        musicAdapter_upload = new MusicAdapter(getApplicationContext(), uploadList, "UPLOAD");
+        recyclerView_upload.setAdapter(musicAdapter_upload);
+        recyclerView_upload.setLayoutManager(new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false));
+    }*/
 }

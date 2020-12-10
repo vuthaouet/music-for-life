@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,18 +32,21 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.musicplayerapp.MainActivity.addToAlbumScreen;
+//import static com.example.musicplayerapp.MainActivity.addToAlbumScreen;
 //import static com.example.musicplayerapp.MainActivity.songIsChecked;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder> {
     private Context mContext;
     private ArrayList<MusicFiles> mFiles;
+    private String state = "";
+
     private DatabaseHelper databaseHelper;
     public static List<Integer> songIsChecked = new ArrayList<>();
 
-    public MusicAdapter(Context mContext, ArrayList<MusicFiles> mFiles) {
+    public MusicAdapter(Context mContext, ArrayList<MusicFiles> mFiles, String state) {
         this.mContext = mContext;
         this.mFiles = mFiles;
+        this.state = state;
 
         this.databaseHelper = new DatabaseHelper(mContext);
     }
@@ -84,7 +88,7 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
         /*byte[] image = getAlbumArt(mFiles.get(position).getPath());
         setImage(image, mContext, holder.album_art);*/
 
-        if (addToAlbumScreen) {
+        if (Config.addToAlbumScreen) {
             holder.menuMore.setVisibility(View.INVISIBLE);
             holder.checkToAdd.setVisibility(View.VISIBLE);
             holder.checkToAdd.setEnabled(false);
@@ -108,6 +112,8 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.d("checkState", "onClick: " + Config.playOnline);
+
                     if (!Config.playOnline) {
                         Intent intent = new Intent(mContext, PlayerActivity.class);
                         intent.putExtra("songName", mFiles.get(position).getTitle());
@@ -116,7 +122,19 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
                     } else {
                         Intent intent = new Intent(mContext, PlayerActivityOnline.class);
                         intent.putExtra("songIndexOnl", position);
-                        intent.setAction("searchSongListener");
+                        switch (state) {
+                            case "SEARCH":
+                                intent.setAction("searchSongListener");
+                                break;
+                            case "FAVOR":
+                                intent.setAction("favorSongListener");
+                                break;
+                            case "UPLOAD":
+                                intent.setAction("uploadSongListener");
+                                break;
+                            default:
+                                break;
+                        }
                         mContext.startActivity(intent);
                     }
                 }
@@ -133,7 +151,6 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder
                         public boolean onMenuItemClick(MenuItem menuItem) {
                             switch (menuItem.getItemId()) {
                                 case R.id.delete:
-                                    Toast.makeText(mContext, "Delete Clicked " + position, Toast.LENGTH_SHORT).show();
                                     deleteFile(position, view);
                                     break;
                                 default:

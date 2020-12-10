@@ -7,23 +7,25 @@
     tools:context=".Fragment.SongsFragment">
 
     <Button
-        android:id="@+id/play_random"
+        android:id="@+id/add_to_album"
         android:layout_width="250dp"
         android:layout_height="45dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:background="@drawable/random_btn_purple"
-        android:text="Play Random"
-        android:textColor="#ffffff" />
+        android:text="Add to album"
+        android:textColor="#ffffff"
+        android:visibility="gone"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/play_random"
+        android:layout_below="@id/add_to_album"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="60dp"
         android:background="#f7f7f7" />
 
 

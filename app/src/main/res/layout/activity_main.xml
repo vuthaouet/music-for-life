@@ -8,10 +8,10 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <include
+    <!--<include
         android:id="@+id/toolbar"
         layout = "@layout/toolbar"
-        android:gravity="top"/>
+        android:gravity="top"/>-->
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpage"

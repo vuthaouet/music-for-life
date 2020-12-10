@@ -36,9 +36,11 @@ import com.example.musicplayerapp.Database.Firestore;
 import com.example.musicplayerapp.Database.SearchFiles;
 import com.example.musicplayerapp.Entity.MusicFiles;
 import com.example.musicplayerapp.Format.Format;
+import com.example.musicplayerapp.Fragment.AlbumFragment;
 import com.example.musicplayerapp.Fragment.OfflineFragment;
 import com.example.musicplayerapp.Fragment.OnlineFragment;
 import com.example.musicplayerapp.Fragment.ProfileFragment;
+import com.example.musicplayerapp.Fragment.SongsFragment;
 import com.example.musicplayerapp.PlayMusic.PlayerActivity;
 import com.google.android.material.tabs.TabLayout;
 
@@ -65,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     static ImageView cover_art_main;
     static ImageView play_pause_main;
     static ImageView id_next_main;
-
-    public static boolean addToAlbumScreen = false;
 
     private DatabaseHelper databaseHelper;
     private String MY_SORT_PREF = "SortOrder";
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                     allNameAlbum.remove(nameAlbumDeleted);
                     break;
                 case "AddToAlbum":
-                    addToAlbumScreen = true;
+                    Config.addToAlbumScreen = true;
                     //albumName = getIntent().getStringExtra("albumNameAdded");
                     break;
                 case "toAlbumFragment":
@@ -179,23 +179,27 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         allNameAlbum = databaseHelper.getAllTableName();
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        viewPagerAdapter.addFragments(new SongsFragment(), "Song");
+        viewPagerAdapter.addFragments(new AlbumFragment(), "Album");
         viewPagerAdapter.addFragments(new OnlineFragment(), "Online");
-        viewPagerAdapter.addFragments(new OfflineFragment(), "Offline");
-        viewPagerAdapter.addFragments(new ProfileFragment(), "Cá nhân");
+        //viewPagerAdapter.addFragments(new OfflineFragment(), "Offline");
+        viewPagerAdapter.addFragments(new ProfileFragment(), "User");
 
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
         Objects.requireNonNull(tabLayout.getTabAt(0)).setIcon(R.drawable.ic_music_song);
-        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.ic_album);
-        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.ic_profile);
+        Objects.requireNonNull(tabLayout.getTabAt(1)).setIcon(R.drawable.ic_music_song);
+        Objects.requireNonNull(tabLayout.getTabAt(2)).setIcon(R.drawable.ic_album);
+        Objects.requireNonNull(tabLayout.getTabAt(3)).setIcon(R.drawable.ic_profile);
 
         /*if (mediaPlayer != null && 1 == 2) {
             addPlayingSongLayout();
         }*/
     }
 
-    private void addPlayingSongLayout() {
+    /*private void addPlayingSongLayout() {
         RelativeLayout relativeLayout = findViewById(R.id.main_layout);
         getLayoutInflater().inflate(R.layout.player_running, relativeLayout);
 
@@ -223,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         id_next_main = findViewById(R.id.id_next_main);
 
         //controlMusicPlayerFromMain(getApplicationContext());
-    }
+    }*/
 
     /*public static void controlMusicPlayerFromMain(final Context context) {
         song_name_main.setText(listSongs.get(position).getTitle());
@@ -395,14 +399,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 intent = new Intent(getApplicationContext(), CreateNewAlbum.class);
                 startActivity(intent);
                 break;
-            case R.id.addOrExit:
-                addToAlbumScreen = false;
+            /*case R.id.addOrExit:
+                Config.addToAlbumScreen = false;
                 String albumName = getIntent().getStringExtra("albumNameAdded");
                 if (databaseHelper.addMany(albumName, addToAlbum())) {
                     intent = new Intent(MainActivity.this, MainActivity.class);
                     startActivity(intent);
                 }
-                break;
+                break;*/
             case R.id.music_online:
                 Intent intent1 = new Intent(getApplicationContext(), Firestore.class);
                 startActivity(intent1);
@@ -416,19 +420,6 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private List<MusicFiles> addToAlbum() {
-        List<MusicFiles> listAddedSong = new ArrayList<>();
-
-        Log.d("sqlite", "totalInAlbum: " + songIsChecked.size());
-        for (int i = 0; i < songIsChecked.size(); i++) {
-            int index = songIsChecked.get(i);
-            listAddedSong.add(musicFiles.get(index));
-        }
-
-        songIsChecked.clear();
-        return listAddedSong;
     }
 
     public void onDestroy() {

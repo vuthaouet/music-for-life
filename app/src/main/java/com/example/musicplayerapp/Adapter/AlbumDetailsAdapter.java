@@ -13,9 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.musicplayerapp.Config;
 import com.example.musicplayerapp.Database.DatabaseHelper;
 import com.example.musicplayerapp.Entity.MusicFiles;
 import com.example.musicplayerapp.PlayMusic.PlayerActivity;
+import com.example.musicplayerapp.PlayMusic.PlayerActivityOnline;
 import com.example.musicplayerapp.R;
 
 import java.util.List;
@@ -83,13 +85,20 @@ public class AlbumDetailsAdapter extends RecyclerView.Adapter<AlbumDetailsAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, PlayerActivity.class);
-                //intent.putExtra("playAlbum", "myAlbum");
-                //intent.putExtra("songName", albumFiles.get(position).getTitle());
-                intent.setAction("playAlbum");
-                intent.putExtra("albumNamePlayed", albumName);
-                intent.putExtra("songIndexPlayed", position);
-                mContext.startActivity(intent);
+                if (Config.playOnline) {
+                    Intent intent = new Intent(mContext, PlayerActivityOnline.class);
+                    intent.setAction("albumSongListener");
+                    intent.putExtra("songIndexOnl", position);
+                    mContext.startActivity(intent);
+                } else {
+                    Intent intent = new Intent(mContext, PlayerActivity.class);
+                    //intent.putExtra("playAlbum", "myAlbum");
+                    //intent.putExtra("songName", albumFiles.get(position).getTitle());
+                    intent.setAction("playAlbum");
+                    intent.putExtra("albumNamePlayed", albumName);
+                    intent.putExtra("songIndexPlayed", position);
+                    mContext.startActivity(intent);
+                }
             }
         });
     }

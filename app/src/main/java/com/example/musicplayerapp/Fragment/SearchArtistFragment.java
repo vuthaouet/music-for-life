@@ -79,7 +79,7 @@ public class SearchArtistFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
 
-        artistAdapter = new MusicAdapter(getContext(), lookForSongsByArtist);
+        artistAdapter = new MusicAdapter(getContext(), lookForSongsByArtist, "SEARCH");
         recyclerView.setAdapter(artistAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
 

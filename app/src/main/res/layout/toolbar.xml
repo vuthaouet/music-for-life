@@ -30,13 +30,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
+            <TextView
                 android:id="@+id/search_option"
                 android:layout_width="260dp"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
                 android:layout_marginStart="52dp"
                 android:background="#00000000"
+                android:paddingTop="15dp"
                 android:hint="Bài hát, album, ca sĩ..."
                 android:paddingLeft="15dp"
                 app:actionViewClass="android.widget.SearchView"

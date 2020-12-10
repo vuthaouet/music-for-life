@@ -1,16 +1,18 @@
 package com.example.musicplayerapp.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.musicplayerapp.AlbumDetails.AlbumDetails;
+import com.example.musicplayerapp.AlbumDetails.AlbumDetailsOnline;
 import com.example.musicplayerapp.Entity.HorizontalModel;
 import com.example.musicplayerapp.R;
 
@@ -40,7 +42,10 @@ public class HorizontalRecycleViewAdapter extends RecyclerView.Adapter<Horizonta
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,horizontalModel.getName(),Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, AlbumDetailsOnline.class);
+                intent.putExtra("albumContain", horizontalModel.getDescription());
+                intent.putExtra("albumName", horizontalModel.getName());
+                context.startActivity(intent);
             }
         });
     }

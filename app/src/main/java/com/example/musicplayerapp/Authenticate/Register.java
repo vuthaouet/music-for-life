@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.musicplayerapp.MainActivity;
@@ -22,7 +23,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +60,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final String email = rEmail.getText().toString().trim();
-                String password = rPassword.getText().toString().trim();
+                final String password = rPassword.getText().toString().trim();
                 final String fullName = rFullname.getText().toString().trim();
 
                 if (TextUtils.isEmpty(email)) {
@@ -69,6 +73,23 @@ public class Register extends AppCompatActivity {
                 }
 
                 regLoading.setVisibility(View.VISIBLE);
+
+                /*firebaseFirestore.collection("Users")
+                        .whereEqualTo("fullname", fullName)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    if (task.getResult().isEmpty()) {
+
+                                    } else {
+                                        rFullname.setError("This name is already existed");
+                                    }
+                                }
+                            }
+                        });*/
+
                 firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -98,8 +119,7 @@ public class Register extends AppCompatActivity {
                         }
                     }
                 });
-
-
+                //regLoading.setVisibility(View.GONE);
             }
         });
 

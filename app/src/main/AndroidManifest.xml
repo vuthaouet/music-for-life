@@ -39,7 +39,10 @@
             android:name=".CreateNewAlbum"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
-            android:name=".AlbumDetails"
+            android:name=".AlbumDetails.AlbumDetails"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+        <activity
+            android:name=".AlbumDetails.AlbumDetailsOnline"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity android:name=".PlayMusic.PlayerActivity" />
         <activity android:name=".PlayMusic.PlayerActivityOnline" />

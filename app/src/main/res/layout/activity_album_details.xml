@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
-    tools:context=".AlbumDetails">
+    tools:context=".AlbumDetails.AlbumDetails">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_top_btn_album"
@@ -101,7 +101,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/buttonAlbumplayer"
         android:layout_marginTop="25dp" />
 
@@ -111,7 +111,7 @@
         android:layout_height="66dp"
         android:layout_below="@+id/buttonAlbumplayer"
         android:layout_marginLeft="330dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="285dp"
         android:src="@drawable/ic_baseline_add_circle_black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
