@@ -62,13 +62,13 @@ public class OfflineFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_offline, container, false);
-        recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        if (!(musicFiles.size() < 1)) {
-            albumAdapter = new AlbumAdapter(getContext(), allNameAlbum);
-            recyclerView.setAdapter(albumAdapter);
-            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        }
+//        recyclerView = view.findViewById(R.id.recyclerView);
+//        recyclerView.setHasFixedSize(true);
+//        if (!(musicFiles.size() < 1)) {
+//            albumAdapter = new AlbumAdapter(getContext(), allNameAlbum);
+//            recyclerView.setAdapter(albumAdapter);
+//            recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+//        }
         return view;
     }
 }

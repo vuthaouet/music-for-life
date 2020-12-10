@@ -12,8 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.musicplayerapp.Adapter.AlbumAdapter;
 import com.example.musicplayerapp.Adapter.MusicAdapter;
+import com.example.musicplayerapp.Adapter.VerticalRecycleViewAdapter;
+import com.example.musicplayerapp.Entity.HorizontalModel;
+import com.example.musicplayerapp.Entity.VerticalModel;
 import com.example.musicplayerapp.R;
 
+
+import java.util.ArrayList;
 
 import static com.example.musicplayerapp.MainActivity.allNameAlbum;
 import static com.example.musicplayerapp.MainActivity.musicFiles;
@@ -27,6 +32,10 @@ public class OnlineFragment extends Fragment {
     RecyclerView recyclerViewSong;
     static MusicAdapter musicAdapter;
     AlbumAdapter albumAdapter;
+
+    VerticalRecycleViewAdapter adapter;
+    ArrayList<VerticalModel> arrayList = new ArrayList<>();
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -56,10 +65,9 @@ public class OnlineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+
+        setData();
     }
 
     @Override
@@ -67,21 +75,34 @@ public class OnlineFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_online, container, false);
-        recyclerViewAlbum = view.findViewById(R.id.recyclerViewAlbum);
+        recyclerViewAlbum = view.findViewById(R.id.recyclerView);
         recyclerViewAlbum.setHasFixedSize(true);
-        if (!(musicFiles.size() < 1)) {
-            albumAdapter = new AlbumAdapter(getContext(), allNameAlbum);
-            recyclerViewAlbum.setAdapter(albumAdapter);
-            recyclerViewAlbum.setLayoutManager( new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        }
-        recyclerViewSong = view.findViewById(R.id.recyclerViewSong);
-        recyclerViewSong.setHasFixedSize(true);
 
-        if (!(musicFiles.size() < 1)) {
-            musicAdapter = new MusicAdapter(getContext(), musicFiles);
-            recyclerViewSong.setAdapter(musicAdapter);
-            recyclerViewSong.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        }
+        recyclerViewAlbum.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+
+        adapter = new VerticalRecycleViewAdapter(getContext(), arrayList);
+
+        recyclerViewAlbum.setAdapter(adapter);
+
+
         return view;
+    }
+
+    private void setData() {
+
+        for (int i = 0; i < 5; i++) {
+            VerticalModel verticalModel = new VerticalModel();
+            verticalModel.setTitle("title:" + i);
+            ArrayList<HorizontalModel> arrayListHorizontal = new ArrayList<>();
+            for (int j=0; j<5; j++){
+                HorizontalModel horizontalModel = new HorizontalModel();
+                horizontalModel.setDescription("bucac" + j);
+                horizontalModel.setName("Name:" + j);
+                arrayListHorizontal.add(horizontalModel);
+            }
+
+            verticalModel.setArrayList(arrayListHorizontal);
+            arrayList.add(verticalModel);
+        }
     }
 }

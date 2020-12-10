@@ -9,8 +9,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -26,31 +24,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.musicplayerapp.Adapter.ViewPagerAdapter;
-import com.example.musicplayerapp.Authenticate.Login;
 import com.example.musicplayerapp.Authenticate.UserInfor;
 import com.example.musicplayerapp.Database.DatabaseHelper;
 import com.example.musicplayerapp.Database.Firestore;
 import com.example.musicplayerapp.Database.SearchFiles;
 import com.example.musicplayerapp.Entity.MusicFiles;
 import com.example.musicplayerapp.Format.Format;
-import com.example.musicplayerapp.Fragment.AlbumFragment;
 import com.example.musicplayerapp.Fragment.OfflineFragment;
 import com.example.musicplayerapp.Fragment.OnlineFragment;
 import com.example.musicplayerapp.Fragment.ProfileFragment;
-import com.example.musicplayerapp.Fragment.SongsFragment;
 import com.example.musicplayerapp.PlayMusic.PlayerActivity;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +52,6 @@ import static com.example.musicplayerapp.Adapter.MusicAdapter.songIsChecked;
 //import static com.example.musicplayerapp.PlayMusic.PlayerActivity.position;
 //import static com.example.musicplayerapp.PlayMusic.PlayerActivity.tempSongName;
 import static com.example.musicplayerapp.Fragment.AlbumFragment.albumAdapter;
-import static com.example.musicplayerapp.PlayMusic.PlayerActivity.uri;
 import static com.example.musicplayerapp.Fragment.SongsFragment.musicAdapter;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
